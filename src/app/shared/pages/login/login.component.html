@@ -1,1 +1,38 @@
-<p>login works!</p>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="col-md-6">
+        <!-- Card for the form -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="text-center mb-4">User Login</h3>
+                <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" class="form-control" name="username"
+                            [(ngModel)]="user.username" #username="ngModel" required>
+                        <div *ngIf="username.invalid && username.touched" class="text-danger">
+                            Username is required.
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" name="password"
+                            [(ngModel)]="user.password" #password="ngModel" required minlength="8">
+                        <div *ngIf="password.invalid && password.touched" class="text-danger">
+                            Password is required and must be at least 8 characters long.
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary w-100"
+                            [disabled]="loginForm.invalid">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
