@@ -1,0 +1,29 @@
+
+.vik {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+  }
+  
+  .unauthorized-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .card {
+    max-width: 400px;
+    border: none;
+  }
+  
+  .card-header {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  a {
+    margin: 0 20px 0 20px;
+  }
+  
