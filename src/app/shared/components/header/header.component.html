@@ -1,26 +1,60 @@
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">MyApp</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid px-4">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-primary" href="#">E-Commerce App</a>
+
+            <!-- Toggler for Mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <!-- Common Links -->
+                    <li *ngIf="role !== 'Admin'" class="nav-item">
+                        <a class="nav-link active fw-semibold" aria-current="page" routerLink="/home">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
+
+                    <!-- Admin Menu -->
+                    <div *ngIf="role === 'Admin'">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/categories">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/subcategories">Subcategories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/products">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/users">Users</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Customer Menu -->
+                    <div *ngIf="role === 'Customer'">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/orders">Orders</a>
+                            </li>
+                        </ul>
+                    </div>
                 </ul>
-                <div class="d-flex">
-                    <button class="btn btn-outline-primary me-2" type="button" routerLink="/login">Login</button>
-                    <button class="btn btn-primary" type="button" routerLink="/register">Register</button>
+
+                <!-- Authentication Buttons -->
+                <div class="d-flex align-items-center">
+                    <div *ngIf="!isLogged">
+                        <button class="btn btn-outline-primary me-2" type="button" routerLink="/login">Login</button>
+                        <button class="btn btn-primary" type="button" routerLink="/register">Register</button>
+                    </div>
+                    <div *ngIf="isLogged">
+                        <button class="btn btn-danger" type="button" (click)="onLogout()">Logout</button>
+                    </div>
                 </div>
             </div>
         </div>

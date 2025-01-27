@@ -27,13 +27,15 @@ export const routes: Routes = [
 
   {
     path: 'admin',
-    loadChildren: () =>
-    import('./admin/admin.routes').then((m) => m.adminRoutes), canActivate: [authGuard]
+    loadChildren: () => import('./admin/admin.routes').then((m) => m.adminRoutes), 
+    canActivate: [authGuard], 
+    data: { roles: ['Admin'] }
   },
   {
     path: 'customer',
-    loadChildren: () =>
-    import('./customer/customer.routes').then((m) => m.customerRoutes), canActivate: [authGuard]
+    loadChildren: () => import('./customer/customer.routes').then((m) => m.customerRoutes), 
+    canActivate: [authGuard],
+    data: { roles: ['Customer'] }
   },
 
 

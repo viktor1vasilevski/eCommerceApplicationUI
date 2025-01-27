@@ -1,37 +1,62 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="col-md-6">
-        <!-- Card for the form -->
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="text-center mb-4">User Login</h3>
-                <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+<div class="container py-5">
+    <div class="row align-items-center">
+        <!-- Left Side: Image -->
+        <div class="col-md-6 d-none d-md-block">
+            <img src="../../../../assets/images/login-image.jpg" alt="Login" class="img-fluid" />
+        </div>
 
-                    <!-- Username -->
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" id="username" class="form-control" name="username"
-                            [(ngModel)]="user.username" #username="ngModel" required>
-                        <div *ngIf="username.invalid && username.touched" class="text-danger">
-                            Username is required.
+        <!-- Right Side: Login Form -->
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h3 class="text-center mb-4 text-primary fw-bold">Welcome Back</h3>
+                    <p class="text-center text-muted mb-4">Please log in to your account</p>
+
+                    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                        <!-- Username -->
+                        <div class="form-group mb-3">
+                            <label for="username" class="form-label fw-semibold">Username</label>
+                            <input type="text" id="username" class="form-control rounded-3" formControlName="username"
+                                placeholder="Enter your username" />
+                            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+                                class="text-danger mt-1">
+                                <small *ngIf="loginForm.get('username')?.errors?.['required']">Username is
+                                    required.</small>
+                                <small *ngIf="loginForm.get('username')?.errors?.['minlength']">Username must be at
+                                    least 5 characters.</small>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Password -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" id="password" class="form-control" name="password"
-                            [(ngModel)]="user.password" #password="ngModel" required minlength="8">
-                        <div *ngIf="password.invalid && password.touched" class="text-danger">
-                            Password is required and must be at least 8 characters long.
+                        <!-- Password -->
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label fw-semibold">Password</label>
+                            <input type="password" id="password" class="form-control rounded-3"
+                                formControlName="password" placeholder="Enter your password" />
+                            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                class="text-danger mt-1">
+                                <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is
+                                    required.</small>
+                                <small *ngIf="loginForm.get('password')?.errors?.['pattern']">
+                                    Password must be at least 4 characters long and include an uppercase letter,
+                                    lowercase letter, number, and special character.
+                                </small>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary w-100"
-                            [disabled]="loginForm.invalid">Login</button>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold"
+                            [disabled]="loginForm.invalid">
+                            Login
+                        </button>
+                    </form>
+
+                    <!-- Register Link -->
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Don't have an account?
+                            <a routerLink="/register" class="text-primary fw-semibold">Register</a>
+                        </p>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

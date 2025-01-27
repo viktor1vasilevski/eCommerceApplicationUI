@@ -4,11 +4,11 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationManagerService {
+export class AuthManagerService {
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly ROLE_KEY = 'user_role';
-  private readonly USER_ID = 'user_id';
+  private readonly USERNAME_KEY = 'user_name';
 
   private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
   loggedIn$ = this.loggedInSubject.asObservable();
@@ -16,12 +16,15 @@ export class AuthenticationManagerService {
   private subjetRole = new BehaviorSubject<string | null>(this.getRole());
   role$ = this.subjetRole.asObservable();
 
+  private username = new BehaviorSubject<string | null>(this.getUsername());
+  username$ = this.username.asObservable();
+
   constructor() { }
 
-  setSession(token: string, role: string, userId: string): void {
+  setSession(token: string, role: string, username: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.ROLE_KEY, role);
-    localStorage.setItem(this.USER_ID, userId);
+    localStorage.setItem(this.USERNAME_KEY, username);
     this.loggedInSubject.next(true);
   }
   
@@ -33,15 +36,16 @@ export class AuthenticationManagerService {
     return localStorage.getItem(this.ROLE_KEY);
   }
 
-  getUserId(): string | null {
-    return localStorage.getItem(this.USER_ID);
+  getUsername(): string | null {
+    return localStorage.getItem(this.USERNAME_KEY);
   }
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.ROLE_KEY);
-    localStorage.removeItem(this.USER_ID);
+    localStorage.removeItem(this.USERNAME_KEY);
     this.loggedInSubject.next(false);
+    this.subjetRole.next(null);
   }
 
   setLoggedInState(value: boolean, role: string): void {
