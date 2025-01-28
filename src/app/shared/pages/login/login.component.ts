@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { AuthManagerService } from '../../services/auth-manager.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { ApiResponse } from '../../../core/models/responses/api-response';
+import { LoginDTO } from '../../models/auth/login-dto';
 
 @Component({
   selector: 'app-login',
@@ -39,11 +41,12 @@ export class LoginComponent {
       const loginForm = this.loginForm.value;
       this._authService.loginUser(loginForm)
         .subscribe({
-          next: (response: any) => {
+          next: (response: ApiResponse<LoginDTO>) => {
             if(response && response.success) {
-              const token = response.data.token;
-              const role = response.data.role;
-              const username = response.data.username;
+              debugger
+              const token = response.data?.token;
+              const role = response.data?.role;
+              const username = response.data?.username;
 
               role === 'Admin'
               ? this.router.navigate(['/admin/users'])
@@ -60,7 +63,7 @@ export class LoginComponent {
               this._notificationService.info(response.message);
             }
           },
-          error: (errorResponse: any) => {
+          error: (errorResponse: ApiResponse<LoginDTO>) => {
             this.isLoading = false;
             this._errorHandlerService.handleErrors(errorResponse);
           }

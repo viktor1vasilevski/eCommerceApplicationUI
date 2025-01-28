@@ -8,20 +8,25 @@ export class NotificationService {
   
   constructor(private _toastr: ToastrService) {}
 
-  success(message: string, title: string = 'Success', options: any = {}) {
-    this._toastr.success(message, title, {
-      timeOut: 4500,
-      positionClass: 'toast-bottom-right',
-      ...options
-    });
+  success(message: string | null, title: string = 'Success', options: any = {}) {
+    if(message !== null) {
+      this._toastr.success(message, title, {
+        timeOut: 4500,
+        positionClass: 'toast-bottom-right',
+        ...options
+      });
+    }
+
   }
 
-  info(message: string, title: string = 'Info', options: any = {}) {
-    this._toastr.info(message, title, {
-      timeOut: 4500,
-      positionClass: 'toast-bottom-right',
-      ...options
-    });
+  info(message: string | null, title: string = 'Info', options: any = {}) {
+    if(message !== null) {
+      this._toastr.info(message, title, {
+        timeOut: 4500,
+        positionClass: 'toast-bottom-right',
+        ...options
+      });
+    }
   }
 
   warning(message: string, title: string = 'Warning', options: any = {}) {

@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../enviroments/enviroment.dev';
 import { HttpClient } from '@angular/common/http';
+import { UserRegisterRequest } from '../models/auth/user-register-request';
+import { UserLoginRequest } from '../models/auth/user-login-request';
+import { ApiResponse } from '../../core/models/responses/api-response';
+import { LoginDTO } from '../models/auth/login-dto';
+import { RegisterDTO } from '../models/auth/register-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,26 +16,13 @@ export class AuthService {
 
   constructor(private _http: HttpClient) { }
 
-  registerUser(model: any) {
-    return this._http.post<any>(`${this.baseUrl}/auth/register`, 
-      {
-        firstName: model.firstName,
-        lastName: model.lastName,
-        username: model.username,
-        email: model.email,
-        password: model.password,
-        cityId: model.cityId,
-        jobId: model.jobId,
-        yearsInCurrentJob: model.yearsInCurrentJob,
-        totalYearsOfExperience: model.totalYearsOfExperience
-      })
+  // Register a new user
+  registerUser(request: UserRegisterRequest) {
+    return this._http.post<ApiResponse<RegisterDTO>>(`${this.baseUrl}/auth/register`, request);
   }
 
-  loginUser(model: any) {
-    return this._http.post<any>(`${this.baseUrl}/auth/login`, 
-    {
-      username: model.username,
-      password: model.password
-    })
+  // Login an existing user
+  loginUser(request: UserLoginRequest) {
+    return this._http.post<ApiResponse<LoginDTO>>(`${this.baseUrl}/auth/login`, request);
   }
 }
