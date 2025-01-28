@@ -37,7 +37,7 @@
                         <!-- Password -->
                         <div class="form-group mb-3">
                             <label for="password" class="form-label fw-semibold">Password</label>
-                            <input type="password" id="password" class="form-control rounded-3"
+                            <input type="password" id="password" #passwordInput class="form-control rounded-3"
                                 formControlName="password" placeholder="Enter your password" />
                             <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
                                 class="text-danger mt-1">

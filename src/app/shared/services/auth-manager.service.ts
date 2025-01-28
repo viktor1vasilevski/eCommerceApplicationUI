@@ -19,6 +19,9 @@ export class AuthManagerService {
   private username = new BehaviorSubject<string | null>(this.getUsername());
   username$ = this.username.asObservable();
 
+  private usernameForLogin = new BehaviorSubject<string>("");
+  getUsernameForLogin$ = this.usernameForLogin.asObservable();
+
   constructor() { }
 
   setSession(token: string | undefined, role: string | undefined, username: string | undefined): void {
@@ -40,6 +43,12 @@ export class AuthManagerService {
 
   getUsername(): string | null {
     return localStorage.getItem(this.USERNAME_KEY);
+  }
+
+  setUsername(username: string | undefined) {
+    if(username != undefined) {
+      this.usernameForLogin.next(username);
+    }
   }
 
   logout(): void {

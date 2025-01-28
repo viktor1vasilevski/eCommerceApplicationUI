@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -21,6 +21,7 @@ export class LoginComponent {
   isLoading: boolean = false;
   loginForm: FormGroup;
   passwordPattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{4,}$';
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
 
   constructor(private fb: FormBuilder,
     private _authService: AuthService,
@@ -33,6 +34,14 @@ export class LoginComponent {
       username: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
     });
+
+    this._authManagerService.getUsernameForLogin$.subscribe(username => {
+      if(username != "") {
+        this.loginForm.patchValue({username: username})
+        setTimeout(() => this.passwordInput?.nativeElement.focus(), 0);
+      }
+
+    })
   }
 
   onLogin() {

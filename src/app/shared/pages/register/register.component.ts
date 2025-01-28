@@ -4,6 +4,10 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { ApiResponse } from '../../../core/models/responses/api-response';
+import { RegisterDTO } from '../../models/auth/register-dto';
+import { AuthManagerService } from '../../services/auth-manager.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +25,8 @@ export class RegisterComponent {
 
   constructor(private fb: FormBuilder,
     private _authService: AuthService,
+    private _authManagerService: AuthManagerService,
+    private router: Router,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService) {
     this.registerForm = this.fb.group({
@@ -39,19 +45,19 @@ export class RegisterComponent {
       const registerForm = this.registerForm.value;
       this._authService.registerUser(registerForm)
         .subscribe({
-          next: (response: any) => {
+          next: (response: ApiResponse<RegisterDTO>) => {
             if(response && response.success) {
-
               this.isLoading = false;
-               
+              this._authManagerService.setUsername(response.data?.username)
               this._notificationService.success(response.message);
               this.registerForm.reset();
+              this.router.navigate(['/login'])
             } else {
               this.isLoading = false;
               this._notificationService.info(response.message);
             }
           },
-          error: (errorResponse: any) => {
+          error: (errorResponse: ApiResponse<RegisterDTO>) => {
             this.isLoading = false;
             this._errorHandlerService.handleErrors(errorResponse);
           }
