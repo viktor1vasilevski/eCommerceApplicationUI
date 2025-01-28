@@ -1,4 +1,11 @@
-<div class="container py-5">
+<div class="container py-5 position-relative">
+
+    <div *ngIf="isLoading" class="page-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <div class="row align-items-center">
         <!-- Left Side: Image -->
         <div class="col-md-6 d-none d-md-block">

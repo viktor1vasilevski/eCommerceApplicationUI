@@ -16,6 +16,7 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
 })
 export class LoginComponent {
 
+  isLoading: boolean = false;
   loginForm: FormGroup;
   passwordPattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{4,}$';
 
@@ -34,31 +35,38 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const loginForm = this.loginForm.value;
       this._authService.loginUser(loginForm)
         .subscribe({
           next: (response: any) => {
-            debugger
             if(response && response.success) {
               const token = response.data.token;
               const role = response.data.role;
               const username = response.data.username;
-              role == 'Admin' ? this.router.navigate(['/admin/users']) : this.router.navigate(['/customer/orders']);
+
+              role === 'Admin'
+              ? this.router.navigate(['/admin/users'])
+              : this.router.navigate(['/customer/orders']);
+
+              this.isLoading = false;
   
               this._authManagerService.setSession(token, role, username);
-              this._authManagerService.setLoggedInState(true, role);
-              debugger
-
+              this._authManagerService.setLoggedInState(true, role);              
               this._notificationService.success(response.message);
+              this.loginForm.reset();
             } else {
+              this.isLoading = false;
               this._notificationService.info(response.message);
             }
           },
           error: (errorResponse: any) => {
+            this.isLoading = false;
             this._errorHandlerService.handleErrors(errorResponse);
           }
         })
     } else {
+      this.isLoading = false;
       this._notificationService.info("Invalid form");
     }
   }
