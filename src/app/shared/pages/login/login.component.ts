@@ -52,7 +52,6 @@ export class LoginComponent {
         .subscribe({
           next: (response: ApiResponse<LoginDTO>) => {
             if(response && response.success) {
-              debugger
               const token = response.data?.token;
               const role = response.data?.role;
               const username = response.data?.username;

@@ -12,8 +12,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   const isLoggedIn = authService.isLoggedIn();
   const userRole = authService.getRole();
 
-  debugger
-
   if (isLoggedIn) {
 
     if (!userRole) {

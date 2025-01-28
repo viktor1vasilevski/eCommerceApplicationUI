@@ -29,7 +29,6 @@ export class HeaderComponent {
 
 
   onLogout() : void {
-    debugger
     this._authManagerService.logout();
     this.router.navigate(['/home']);
   }
