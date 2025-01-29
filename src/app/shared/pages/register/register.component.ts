@@ -40,33 +40,36 @@ export class RegisterComponent {
 
 
   onRegister() {
-    if (this.registerForm.valid) {
-      this.isLoading = true;
-      const registerForm = this.registerForm.value;
-      this._authService.registerUser(registerForm)
-        .subscribe({
-          next: (response: ApiResponse<RegisterDTO>) => {
-            if(response && response.success) {
-              this.isLoading = false;
-              this._authManagerService.setUsername(response.data?.username)
-              this._notificationService.success(response.message);
-              this.registerForm.reset();
-              this.router.navigate(['/login'])
-            } else {
-              this.isLoading = false;
-              this._notificationService.info(response.message);
-            }
-          },
-          error: (errorResponse: ApiResponse<RegisterDTO>) => {
-            this.isLoading = false;
-            this._errorHandlerService.handleErrors(errorResponse);
-          }
-        })
-    } else {
-      this.isLoading = false;
+    if (!this.registerForm.valid) {
       this._notificationService.info("Invalid form");
+      return;
     }
+  
+    this.isLoading = true;
+    const registerForm = this.registerForm.value;
+  
+    this._authService.registerUser(registerForm).subscribe({
+      next: ({ data, success, message }: ApiResponse<RegisterDTO>) => {
+        debugger
+        this.isLoading = false;
+  
+        if (!success || !data?.username) {
+          this._notificationService.info(message);
+          return;
+        }
+  
+        this._authManagerService.setUsername(data.username);
+        this._notificationService.success(message);
+        this.registerForm.reset();
+        this.router.navigate(['/login']);
+      },
+      error: (errorResponse: ApiResponse<RegisterDTO>) => {
+        this.isLoading = false;
+        this._errorHandlerService.handleErrors(errorResponse);
+      }
+    });
   }
+  
 
 
 }

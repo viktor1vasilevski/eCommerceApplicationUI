@@ -24,14 +24,15 @@ export class AuthManagerService {
 
   constructor() { }
 
-  setSession(token: string | undefined, role: string | undefined, username: string | undefined): void {
-    if(token !== undefined && role !== undefined && username !== undefined) {
-      localStorage.setItem(this.TOKEN_KEY, token);
-      localStorage.setItem(this.ROLE_KEY, role);
-      localStorage.setItem(this.USERNAME_KEY, username);
-      this.loggedInSubject.next(true);
-    }
+  setSession(token?: string, role?: string, username?: string): void {
+    if (!token || !role || !username) return;
+  
+    localStorage.setItem(this.TOKEN_KEY, token);
+    localStorage.setItem(this.ROLE_KEY, role);
+    localStorage.setItem(this.USERNAME_KEY, username);
+    this.loggedInSubject.next(true);
   }
+  
   
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.TOKEN_KEY);
@@ -59,11 +60,9 @@ export class AuthManagerService {
     this.subjetRole.next(null);
   }
 
-  setLoggedInState(value: boolean, role: string | undefined): void {
-    if(role !== undefined) {
-      this.loggedInSubject.next(value);
-      this.subjetRole.next(role);
-    }
-
+  setLoggedInState(value: boolean, role?: string): void {
+    if (!role) return;
+    this.loggedInSubject.next(value);
+    this.subjetRole.next(role);
   }
 }

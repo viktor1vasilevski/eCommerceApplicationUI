@@ -45,42 +45,40 @@ export class LoginComponent {
   }
 
   onLogin() {
-    if (this.loginForm.valid) {
-      this.isLoading = true;
-      const loginForm = this.loginForm.value;
-      this._authService.loginUser(loginForm)
-        .subscribe({
-          next: (response: ApiResponse<LoginDTO>) => {
-            if(response && response.success) {
-              const token = response.data?.token;
-              const role = response.data?.role;
-              const username = response.data?.username;
-
-              role === 'Admin'
-              ? this.router.navigate(['/admin/users'])
-              : this.router.navigate(['/customer/orders']);
-
-              this.isLoading = false;
-  
-              this._authManagerService.setSession(token, role, username);
-              this._authManagerService.setLoggedInState(true, role);              
-              this._notificationService.success(response.message);
-              this.loginForm.reset();
-            } else {
-              this.isLoading = false;
-              this._notificationService.info(response.message);
-            }
-          },
-          error: (errorResponse: ApiResponse<LoginDTO>) => {
-            this.isLoading = false;
-            this._errorHandlerService.handleErrors(errorResponse);
-          }
-        })
-    } else {
-      this.isLoading = false;
+    if (!this.loginForm.valid) {
       this._notificationService.info("Invalid form");
+      return;
     }
+  
+    this.isLoading = true;
+    const loginForm = this.loginForm.value;
+  
+    this._authService.loginUser(loginForm).subscribe({
+      next: ({ data, success, message }: ApiResponse<LoginDTO>) => {
+        debugger
+        this.isLoading = false;
+        
+        if (!success || !data) {
+          this._notificationService.info(message);
+          return;
+        }
+  
+        const { token, role, username } = data;
+  
+        this._authManagerService.setSession(token, role, username);
+        this._authManagerService.setLoggedInState(true, role);
+        this._notificationService.success(message);
+        this.loginForm.reset();
+  
+        this.router.navigate([role === 'Admin' ? '/admin/users' : '/customer/orders']);
+      },
+      error: (errorResponse: ApiResponse<LoginDTO>) => {
+        this.isLoading = false;
+        this._errorHandlerService.handleErrors(errorResponse);
+      }
+    });
   }
+  
 
 
 }
