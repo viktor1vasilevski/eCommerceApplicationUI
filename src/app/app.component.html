@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="container">
+<div [ngClass]="isAdmin ? 'container-fluid' : 'container'">
     <!-- Main content (this will change dynamically) -->
     <router-outlet></router-outlet>
 </div>
