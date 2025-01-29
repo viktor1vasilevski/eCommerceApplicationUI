@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../shared/services/category.service';
 import { CategoryRequest } from '../../../shared/models/category/category-request';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { SortOrder } from '../../../core/enums/sort-order.enum';
+import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ApiResponse } from '../../../core/models/responses/api-response';
+import { CreateCategoryRequest } from '../../models/category/create-category-request';
+import { CreateCategoryDTO } from '../../models/category/create-category-dto';
 
 @Component({
   selector: 'app-categories',
@@ -22,17 +28,25 @@ export class CategoriesComponent implements OnInit {
   categories: any;;
   category: any;
 
+  createEditCategoryForm: FormGroup;
+
   private nameChangeSubject = new Subject<string>();
 
   categoryRequest: CategoryRequest = {
     skip: 0,
     take: 10,
-    sort: 'desc',
+    sort: SortOrder.Descending,
     name: ''
   };
 
-  constructor(private _categoryService: CategoryService) {
-
+  constructor(private fb: FormBuilder,
+    private _categoryService: CategoryService,
+    private _errorHandlerService: ErrorHandlerService,
+    private _notificationService: NotificationService
+  ) {
+    this.createEditCategoryForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+    });
   }
 
   onNameChange(): void {
@@ -76,7 +90,7 @@ export class CategoriesComponent implements OnInit {
         
       },
       error: (errorResponse: any) => {
-
+        this._errorHandlerService.handleErrors(errorResponse);
       }
     });
 
@@ -90,7 +104,7 @@ export class CategoriesComponent implements OnInit {
 
 
   toggleSortOrder() {
-    this.categoryRequest.sort = this.categoryRequest.sort === 'asc' ? 'desc' : 'asc';
+    this.categoryRequest.sort = this.categoryRequest.sort === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
     this.loadCategories();
   }
 
@@ -99,12 +113,29 @@ export class CategoriesComponent implements OnInit {
     this.totalPages = Array.from({ length: pages }, (_, i) => i + 1);
   }
 
-  onSubmit() {
-
+  onCreateEditCategory() {
+    if (!this.createEditCategoryForm.valid) {
+      this._notificationService.info("Invalid form");
+      return;
+    }
+    const createEditCategoryForm = this.createEditCategoryForm.value;
+    this._categoryService.createCategory(createEditCategoryForm).subscribe({
+      next: (response: ApiResponse<CreateCategoryDTO>) => {
+        if (response && response.success) {
+          this.loadCategories();
+          this._notificationService.success(response.message);
+        } else {
+          this._notificationService.info(response.message);
+        }
+      },
+      error: (errorResponse: ApiResponse<CreateCategoryDTO>) => {
+        this._errorHandlerService.handleErrors(errorResponse);
+      }
+    });
   }
 
   editCategory(cat: any) {
-
+    this.isEditMode = true;
   }
 
   deleteCategory(cat: any) {
@@ -112,7 +143,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   cancelEdit() {
-
+    this.isEditMode = false;
   }
 
   ngOnDestroy(): void {

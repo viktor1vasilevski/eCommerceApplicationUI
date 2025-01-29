@@ -18,8 +18,8 @@ export class DataService {
     return this.http.get<T>(`${url}/${id}`);
   }
 
-  create<T>(url: string, data: T): Observable<T> {
-    return this.http.post<T>(url, data);
+  create<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {
+    return this.http.post<ResponseType>(url, data);
   }
 
   update<T>(url: string, id: string | number, data: T): Observable<T> {

@@ -7,13 +7,23 @@
                     <h4 class="mb-0">{{ isEditMode ? 'Edit Category' : 'Create Category' }}</h4>
                 </div>
                 <div class="card-body">
-                    <form (ngSubmit)="onSubmit()" #categoryForm="ngForm">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required />
+                    <form [formGroup]="createEditCategoryForm" (ngSubmit)="onCreateEditCategory()">
+                        <div class="form-group mb-3">
+                            <label for="name" class="form-label fw-semibold">Name</label>
+                            <input type="text" id="name" class="form-control rounded-3" formControlName="name"
+                                placeholder="Enter category name" />
+                            <div *ngIf="createEditCategoryForm.get('name')?.invalid && createEditCategoryForm.get('name')?.touched"
+                                class="text-danger mt-1">
+                                <small *ngIf="createEditCategoryForm.get('name')?.errors?.['required']">Category
+                                    name is
+                                    required.</small>
+                                <small *ngIf="createEditCategoryForm.get('name')?.errors?.['minlength']">Category
+                                    name must be at
+                                    least 3 characters.</small>
+                            </div>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" [disabled]="createEditCategoryForm.invalid">
                                 {{ isEditMode ? 'Save Changes' : 'Create' }}
                             </button>
                             <button *ngIf="isEditMode" type="button" class="btn btn-outline-secondary"
@@ -95,7 +105,7 @@
                         <nav>
                             <ul class="pagination mb-0">
                                 <li class="page-item" [class.disabled]="currentPage === 1">
-                                    <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                                    <a id="test" class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
                                 </li>
                                 <li class="page-item" *ngFor="let page of totalPages"
                                     [class.active]="page === currentPage">

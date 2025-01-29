@@ -11,10 +11,7 @@ export class ErrorHandlerService {
 
   handleErrors(errorResponse: any) {
     if (errorResponse?.error?.errors) {
-      // Handle validation errors
       const errors = errorResponse.error.errors;
-      const allErrors: string[] = [];
-
       for (const field in errors) {
         if (errors.hasOwnProperty(field)) {
           errors[field].forEach((message: string) => {
@@ -22,12 +19,9 @@ export class ErrorHandlerService {
           });
         }
       }
-
     } else if (errorResponse?.error?.message) {
-      // Handle general error messages
       this._notificationService.info(errorResponse.error.message);
     } else {
-      // Fallback for unexpected errors
       this._notificationService.error('An unexpected error occurred.');
     }
   }
