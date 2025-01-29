@@ -32,6 +32,7 @@ export const routes: Routes = [
     path: 'home', 
     loadComponent: () => import('./shared/pages/home/home.component')
         .then((m) => m.HomeComponent),
+    data: { roles: ['Customer'] }
   },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {

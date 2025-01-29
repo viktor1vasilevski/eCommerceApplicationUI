@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -9,8 +9,9 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getAll<T>(url: string): Observable<T[]> {
-    return this.http.get<T[]>(url);
+
+  getAll<T>(url: string, params?: HttpParams): Observable<T> {
+    return this.http.get<T>(url, { params });
   }
 
   getById<T>(url: string, id: string | number): Observable<T> {
