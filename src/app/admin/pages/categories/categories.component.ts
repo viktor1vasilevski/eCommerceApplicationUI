@@ -124,6 +124,7 @@ export class CategoriesComponent implements OnInit {
         if (response && response.success) {
           this.loadCategories();
           this._notificationService.success(response.message);
+          this.createEditCategoryForm.reset();
         } else {
           this._notificationService.info(response.message);
         }
