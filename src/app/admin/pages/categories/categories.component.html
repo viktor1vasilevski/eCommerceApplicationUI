@@ -1,1 +1,55 @@
-<p>categories works!</p>
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Left Column: Create/Edit Form -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ isEditMode ? 'Edit Category' : 'Create Category' }}</h4>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #categoryForm="ngForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="category.name"
+                                required />
+                        </div>
+                        <button type="submit" class="btn btn-primary" [disabled]="!categoryForm.form.valid">
+                            {{ isEditMode ? 'Save Changes' : 'Create' }}
+                        </button>
+                        <button *ngIf="isEditMode" type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">
+                            safdasdasCancel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Categories List -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Categories List</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cat of categories">
+                                <td>{{ cat.name }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning me-2" (click)="onEdit(cat)">Edit</button>
+                                    <button class="btn btn-sm btn-danger" (click)="onDelete(cat.id)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
