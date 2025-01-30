@@ -9,13 +9,12 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-
-  getAll<T>(url: string, params?: HttpParams): Observable<T> {
-    return this.http.get<T>(url, { params });
+  getAll<ResponseType>(url: string, params?: HttpParams): Observable<ResponseType> {
+    return this.http.get<ResponseType>(url, { params });
   }
 
-  getById<T>(url: string, id: string | number): Observable<T> {
-    return this.http.get<T>(`${url}/${id}`);
+  getById<ResponseType>(url: string, id: string | number): Observable<ResponseType> {
+    return this.http.get<ResponseType>(`${url}/${id}`);
   }
 
   create<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {

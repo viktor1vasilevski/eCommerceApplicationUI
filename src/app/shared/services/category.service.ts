@@ -9,6 +9,7 @@ import { CreateCategoryDTO } from '../../admin/models/category/create-category-d
 import { Observable } from 'rxjs';
 import { EditCategoryRequest } from '../../admin/models/category/edit-category-request';
 import { EditCategoryDTO } from '../../admin/models/category/edit-category-dto';
+import { CategoryDTO } from '../../admin/models/category/category-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class CategoryService {
 
   constructor(private _dataApiService: DataService) {}
 
-  getCategories(request: CategoryRequest): any {
+  getCategories(request: CategoryRequest): Observable<ApiResponse<CategoryDTO[]>> {
     const params = new HttpParams()
       .set('skip', request.skip.toString())
       .set('take', request.take.toString())
@@ -27,7 +28,7 @@ export class CategoryService {
       .set('name', request.name);
 
     const url = `${this.baseUrl}/category/get`;
-    return this._dataApiService.getAll<any>(url, params);
+    return this._dataApiService.getAll<ApiResponse<CategoryDTO[]>>(url, params);
   }
 
   createCategory(request: CreateCategoryRequest): Observable<ApiResponse<CreateCategoryDTO>> {

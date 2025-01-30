@@ -10,6 +10,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { ApiResponse } from '../../../core/models/responses/api-response';
 import { CreateCategoryDTO } from '../../models/category/create-category-dto';
 import { EditCategoryDTO } from '../../models/category/edit-category-dto';
+import { CategoryDTO } from '../../models/category/category-dto';
 
 @Component({
   selector: 'app-categories',
@@ -82,15 +83,17 @@ export class CategoriesComponent implements OnInit {
 
   loadCategories() {
     this._categoryService.getCategories(this.categoryRequest).subscribe({
-      next: (response: any) => {
-        if(response) {
+      next: (response: ApiResponse<CategoryDTO[]>) => {
+        debugger
+        if(response && response.success) {
           this.categories = response.data;
-        }
-        this.totalCount = typeof response?.totalCount === 'number' ? response.totalCount : 0;
-        this.calculateTotalPages();
-        
+          this.totalCount = typeof response?.totalCount === 'number' ? response.totalCount : 0;
+          this.calculateTotalPages();
+        } else {
+          this._notificationService.info(response.message);
+        }  
       },
-      error: (errorResponse: any) => {
+      error: (errorResponse: ApiResponse<CategoryDTO[]>) => {
         this._errorHandlerService.handleErrors(errorResponse);
       }
     });
@@ -119,9 +122,7 @@ export class CategoriesComponent implements OnInit {
       this._notificationService.info("Invalid form");
       return;
     }
-    
     const createEditCategoryForm = this.createEditCategoryForm.value;
-
     this.isEditMode ? this.editCategory(createEditCategoryForm) : this.createCategory(createEditCategoryForm);
 
   }
