@@ -11,11 +11,12 @@ import { ApiResponse } from '../../../core/models/responses/api-response';
 import { CreateCategoryDTO } from '../../models/category/create-category-dto';
 import { EditCategoryDTO } from '../../models/category/edit-category-dto';
 import { CategoryDTO } from '../../models/category/category-dto';
+import { PaginationComponent } from "../../components/pagination/pagination.component";
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, PaginationComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
@@ -24,7 +25,7 @@ export class CategoriesComponent implements OnInit {
   isEditMode: boolean = false;
   totalCount: number = 0;
   totalPages: number[] = [];
-  currentPage = 1;
+  currentPage: number = 1;
 
   categories: any;;
   selectedCategory: any;
@@ -69,16 +70,11 @@ export class CategoriesComponent implements OnInit {
       });
   }
 
-  onItemsPerPageChange(event: Event): void {
-    debugger
-    const selectElement = event.target as HTMLSelectElement;
-    const parsedValue = Number(selectElement.value);
-    if (!isNaN(parsedValue)) {
-      this.categoryRequest.take = parsedValue;
-      this.categoryRequest.skip = 0;
-      this.currentPage = 1;
-      this.loadCategories();
-    }
+  onItemsPerPageChange(itemsPerPage: number): void {
+    this.categoryRequest.take = itemsPerPage;
+    this.categoryRequest.skip = 0;
+    this.currentPage = 1;
+    this.loadCategories();
   }
 
   loadCategories() {
@@ -103,7 +99,7 @@ export class CategoriesComponent implements OnInit {
   changePage(page: number): void {
     this.currentPage = page;
     this.categoryRequest.skip = (page - 1) * this.categoryRequest.take;
-    this.loadCategories();
+    this.loadCategories(); // Fetch data for the new page
   }
 
 

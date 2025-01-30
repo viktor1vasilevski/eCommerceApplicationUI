@@ -1,0 +1,5 @@
+/* Add custom styles if needed */
+.page-item.disabled .page-link {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }

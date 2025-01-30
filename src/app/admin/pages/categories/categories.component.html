@@ -88,36 +88,12 @@
                                 </td>
                             </tr>
                         </tbody>
-
                     </table>
 
-                    <!-- Pagination and Items Per Page -->
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <div>
-                            <label for="itemsPerPage" class="form-label me-2">Items per page:</label>
-                            <select id="itemsPerPage" (change)="onItemsPerPageChange($event)"
-                                class="form-select d-inline-block w-auto">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                            </select>
-                        </div>
-                        <nav>
-                            <ul class="pagination mb-0">
-                                <li class="page-item" [class.disabled]="currentPage === 1">
-                                    <a id="test" class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-                                </li>
-                                <li class="page-item" *ngFor="let page of totalPages"
-                                    [class.active]="page === currentPage">
-                                    <a class="page-link" (click)="changePage(page)">{{ page }}</a>
-                                </li>
-                                <li class="page-item" [class.disabled]="currentPage === totalPages.length">
-                                    <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages"
+                        [itemsPerPage]="categoryRequest.take" (pageChange)="changePage($event)"
+                        (itemsPerPageChange)="onItemsPerPageChange($event)">
+                    </app-pagination>
                 </div>
             </div>
         </div>
