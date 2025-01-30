@@ -11,7 +11,7 @@
                         <div class="form-group mb-3">
                             <label for="name" class="form-label fw-semibold">Name</label>
                             <input type="text" id="name" class="form-control rounded-3" formControlName="name"
-                                placeholder="Enter category name" />
+                                placeholder="Enter category name" #categoryNameInput />
                             <div *ngIf="createEditCategoryForm.get('name')?.invalid && createEditCategoryForm.get('name')?.touched"
                                 class="text-danger mt-1">
                                 <small *ngIf="createEditCategoryForm.get('name')?.errors?.['required']">Category
@@ -79,7 +79,8 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" (click)="editCategory(category)">Edit</a></li>
+                                            <li><a class="dropdown-item" (click)="prepareForEdit(category)">Edit</a>
+                                            </li>
                                             <li><a class="dropdown-item text-danger"
                                                     (click)="deleteCategory(category)">Delete</a></li>
                                         </ul>

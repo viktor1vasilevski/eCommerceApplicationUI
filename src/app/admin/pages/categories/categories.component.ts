@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../shared/services/category.service';
 import { CategoryRequest } from '../../../shared/models/category/category-request';
@@ -8,8 +8,8 @@ import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ApiResponse } from '../../../core/models/responses/api-response';
-import { CreateCategoryRequest } from '../../models/category/create-category-request';
 import { CreateCategoryDTO } from '../../models/category/create-category-dto';
+import { EditCategoryDTO } from '../../models/category/edit-category-dto';
 
 @Component({
   selector: 'app-categories',
@@ -26,7 +26,8 @@ export class CategoriesComponent implements OnInit {
   currentPage = 1;
 
   categories: any;;
-  category: any;
+  selectedCategory: any;
+  @ViewChild('categoryNameInput') categoryNameInput!: ElementRef;
 
   createEditCategoryForm: FormGroup;
 
@@ -118,8 +119,32 @@ export class CategoriesComponent implements OnInit {
       this._notificationService.info("Invalid form");
       return;
     }
+    
     const createEditCategoryForm = this.createEditCategoryForm.value;
-    this._categoryService.createCategory(createEditCategoryForm).subscribe({
+
+    this.isEditMode ? this.editCategory(createEditCategoryForm) : this.createCategory(createEditCategoryForm);
+
+  }
+
+  editCategory(form: any) {
+    this._categoryService.editCategory(this.selectedCategory.id, form).subscribe({
+      next:(response: ApiResponse<EditCategoryDTO>) => {
+        if (response && response.success) {
+          this.loadCategories();
+          this._notificationService.success(response.message);
+          this.createEditCategoryForm.reset();
+        } else {
+          this._notificationService.info(response.message);
+        }
+      },
+      error: (errorResponse: ApiResponse<EditCategoryDTO>) => {
+        this._errorHandlerService.handleErrors(errorResponse);
+      }
+    })
+  }
+
+  createCategory(form: any) {
+    this._categoryService.createCategory(form).subscribe({
       next: (response: ApiResponse<CreateCategoryDTO>) => {
         if (response && response.success) {
           this.loadCategories();
@@ -135,9 +160,15 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  editCategory(cat: any) {
+  prepareForEdit(category: any): void {
     this.isEditMode = true;
+    this.selectedCategory = category;
+    this.createEditCategoryForm.patchValue({
+      name: category.name
+    });
+    setTimeout(() => this.categoryNameInput?.nativeElement.focus(), 0);
   }
+
 
   deleteCategory(cat: any) {
 
@@ -145,6 +176,7 @@ export class CategoriesComponent implements OnInit {
 
   cancelEdit() {
     this.isEditMode = false;
+    this.createEditCategoryForm.reset();
   }
 
   ngOnDestroy(): void {

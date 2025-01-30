@@ -7,6 +7,8 @@ import { ApiResponse } from '../../core/models/responses/api-response';
 import { CreateCategoryRequest } from '../../admin/models/category/create-category-request';
 import { CreateCategoryDTO } from '../../admin/models/category/create-category-dto';
 import { Observable } from 'rxjs';
+import { EditCategoryRequest } from '../../admin/models/category/edit-category-request';
+import { EditCategoryDTO } from '../../admin/models/category/edit-category-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +31,12 @@ export class CategoryService {
   }
 
   createCategory(request: CreateCategoryRequest): Observable<ApiResponse<CreateCategoryDTO>> {
-    return this._dataApiService.create<CreateCategoryRequest, ApiResponse<CreateCategoryDTO>>(
-      `${this.baseUrl}/category/create`,
-      request
-    );
+    return this._dataApiService.create<CreateCategoryRequest, ApiResponse<CreateCategoryDTO>>(`${this.baseUrl}/category/create`,request);
   }
 
+
+  editCategory(id: string, request: EditCategoryRequest): Observable<ApiResponse<EditCategoryDTO>> {
+    return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit`, id, request);
+  }
 
 }
