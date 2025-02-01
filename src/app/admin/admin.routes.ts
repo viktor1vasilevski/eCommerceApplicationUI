@@ -5,6 +5,18 @@ export const adminRoutes: Routes = [
     path: 'categories',
     loadComponent: () =>
       import('./pages/categories/categories.component').then((m) => m.CategoriesComponent),
+    children: [
+      {
+        path: 'create',
+        loadComponent: () => import('./pages/categories/create-category/create-category.component')
+          .then((m) => m.CreateCategoryComponent)
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () => import('./pages/categories/edit-category/edit-category.component')
+          .then((m) => m.EditCategoryComponent)
+      },
+    ]
   },
   {
     path: 'subcategories',

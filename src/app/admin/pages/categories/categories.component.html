@@ -7,6 +7,12 @@
                     <h4 class="mb-0">Categories List</h4>
                 </div>
                 <div class="card-body">
+                    <!-- Create Category Button -->
+                    <div class="d-flex justify-content-end mb-3">
+                        <a (click)="loadCreateCategoryPage()" class="btn btn-success">
+                            Create Category
+                        </a>
+                    </div>
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
@@ -43,7 +49,8 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" (click)="prepareForEdit(category)">Edit</a>
+                                            <li><a class="dropdown-item"
+                                                    (click)="loadEditCategoryPage(category.id)">Edit</a>
                                             </li>
                                             <li><a class="dropdown-item text-danger"
                                                     (click)="prepareForDelete(category)">Delete</a></li>
@@ -65,7 +72,8 @@
 
         <!-- Right Column: Create/Edit Form -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
+            <router-outlet></router-outlet>
+            <!-- <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">{{ isEditMode ? 'Edit Category' : 'Create Category' }}</h4>
                 </div>
@@ -96,13 +104,12 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
         </div>
+
+
     </div>
 </div>
-
-
-
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel"

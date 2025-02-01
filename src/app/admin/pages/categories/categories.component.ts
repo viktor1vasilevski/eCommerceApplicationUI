@@ -13,12 +13,13 @@ import { EditCategoryDTO } from '../../models/category/edit-category-dto';
 import { CategoryDTO } from '../../models/category/category-dto';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, PaginationComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, PaginationComponent, RouterOutlet, RouterModule],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
@@ -49,7 +50,8 @@ export class CategoriesComponent implements OnInit {
     private fb: FormBuilder,
     private _categoryService: CategoryService,
     private _errorHandlerService: ErrorHandlerService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private router: Router
   ) {
     this.createEditCategoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -158,14 +160,16 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  prepareForEdit(category: any): void {
-    this.isEditMode = true;
-    this.selectedCategory = category;
-    this.createEditCategoryForm.patchValue({
-      name: category.name
-    });
-    setTimeout(() => this.categoryNameInput?.nativeElement.focus(), 0);
-  }
+  // prepareForEdit(category: any): void {
+  //   this.isEditMode = true;
+  //   this.selectedCategory = category;
+  //   this.createEditCategoryForm.patchValue({
+  //     name: category.name
+  //   });
+  //   setTimeout(() => this.categoryNameInput?.nativeElement.focus(), 0);
+  // }
+
+
 
   prepareForDelete(category: any): void {
     this.categoryToDelete = category;
@@ -214,5 +218,15 @@ export class CategoriesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.nameChangeSubject.complete();
+  }
+
+
+  loadCreateCategoryPage() {
+    this.router.navigate(['/admin/categories/create'])
+    
+  }
+
+  loadEditCategoryPage(categoryId: string) {
+    this.router.navigate([`/admin/categories/edit/${categoryId}`]);
   }
 }
