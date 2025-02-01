@@ -50,6 +50,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   onNameChange(): void {
+    debugger
     this.nameChangeSubject.next(this.categoryRequest.name);
   }
 

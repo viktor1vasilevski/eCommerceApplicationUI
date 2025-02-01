@@ -70,7 +70,7 @@ export class LoginComponent {
         this._notificationService.success(message);
         this.loginForm.reset();
   
-        this.router.navigate([role === 'Admin' ? '/admin/users' : '/customer/orders']);
+        this.router.navigate([role === 'Admin' ? '/admin/categories' : '/customer/orders']);
       },
       error: (errorResponse: ApiResponse<LoginDTO>) => {
         this.isLoading = false;
