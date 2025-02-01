@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { EditCategoryRequest } from '../../admin/models/category/edit-category-request';
 import { EditCategoryDTO } from '../../admin/models/category/edit-category-dto';
 import { CategoryDTO } from '../../admin/models/category/category-dto';
+import { NonGenericApiResponse } from '../../core/models/responses/non-generic-api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,8 @@ export class CategoryService {
     return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit`, id, request);
   }
 
-  deleteCategory(id: string): Observable<ApiResponse<any>> {
+  deleteCategory(id: string): Observable<NonGenericApiResponse> {
     const url = `${this.baseUrl}/category/delete/${id}`;
-    return this._dataApiService.delete<any>(url);
+    return this._dataApiService.delete<NonGenericApiResponse>(url);
   }
 }

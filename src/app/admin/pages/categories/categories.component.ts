@@ -12,6 +12,7 @@ import { CreateCategoryDTO } from '../../models/category/create-category-dto';
 import { EditCategoryDTO } from '../../models/category/edit-category-dto';
 import { CategoryDTO } from '../../models/category/category-dto';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
+import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
 declare var bootstrap: any;
 
 @Component({
@@ -178,16 +179,16 @@ export class CategoriesComponent implements OnInit {
   deleteCategory(): void {
     if (this.categoryToDelete) {
       this._categoryService.deleteCategory(this.categoryToDelete.id).subscribe({
-        next: (response: ApiResponse<any>) => {
+        next: (response: NonGenericApiResponse) => {
           if (response && response.success) {
             this._notificationService.success(response.message);
             this.closeModal();
-            this.loadCategories(); // Refresh the list after deletion
+            this.loadCategories();
           } else {
             this._notificationService.info(response.message);
           }
         },
-        error: (errorResponse: ApiResponse<any>) => {
+        error: (errorResponse: NonGenericApiResponse) => {
           this._errorHandlerService.handleErrors(errorResponse);
         }
       });

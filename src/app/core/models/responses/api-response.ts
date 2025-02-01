@@ -1,10 +1,6 @@
-import { NotificationType } from "../../enums/notification-type.enum";
+import { NonGenericApiResponse } from "./non-generic-api-response";
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T> extends NonGenericApiResponse {
   data: T | null;
-  success: boolean;
-  message: string | null;
   totalCount: number | null;
-  errors: { [key: string]: string[] } | null;
-  notificationType: NotificationType;
 }
