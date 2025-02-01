@@ -26,7 +26,7 @@ export class DataService {
     return this.http.put<ResponseType>(fullUrl, data);
   }
 
-  delete(url: string, id: string | number): Observable<void> {
-    return this.http.delete<void>(`${url}/${id}`);
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(url);
   }
 }

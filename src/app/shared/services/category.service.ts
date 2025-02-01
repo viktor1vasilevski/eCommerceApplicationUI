@@ -40,4 +40,8 @@ export class CategoryService {
     return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit`, id, request);
   }
 
+  deleteCategory(id: string): Observable<ApiResponse<any>> {
+    const url = `${this.baseUrl}/category/delete/${id}`;
+    return this._dataApiService.delete<any>(url);
+  }
 }

@@ -12,6 +12,7 @@ import { CreateCategoryDTO } from '../../models/category/create-category-dto';
 import { EditCategoryDTO } from '../../models/category/edit-category-dto';
 import { CategoryDTO } from '../../models/category/category-dto';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-categories',
@@ -27,8 +28,9 @@ export class CategoriesComponent implements OnInit {
   totalPages: number[] = [];
   currentPage: number = 1;
 
-  categories: any;;
+  categories: any;
   selectedCategory: any;
+  categoryToDelete: any = null; // Holds the category to delete
   @ViewChild('categoryNameInput') categoryNameInput!: ElementRef;
 
   createEditCategoryForm: FormGroup;
@@ -42,7 +44,8 @@ export class CategoriesComponent implements OnInit {
     name: ''
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private _categoryService: CategoryService,
     private _errorHandlerService: ErrorHandlerService,
     private _notificationService: NotificationService
@@ -58,7 +61,7 @@ export class CategoriesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
-  
+
     this.nameChangeSubject
       .pipe(
         debounceTime(400),
@@ -80,20 +83,18 @@ export class CategoriesComponent implements OnInit {
   loadCategories() {
     this._categoryService.getCategories(this.categoryRequest).subscribe({
       next: (response: ApiResponse<CategoryDTO[]>) => {
-        debugger
-        if(response && response.success) {
+        if (response && response.success) {
           this.categories = response.data;
           this.totalCount = typeof response?.totalCount === 'number' ? response.totalCount : 0;
           this.calculateTotalPages();
         } else {
           this._notificationService.info(response.message);
-        }  
+        }
       },
       error: (errorResponse: ApiResponse<CategoryDTO[]>) => {
         this._errorHandlerService.handleErrors(errorResponse);
       }
     });
-
   }
 
   changePage(page: number): void {
@@ -101,7 +102,6 @@ export class CategoriesComponent implements OnInit {
     this.categoryRequest.skip = (page - 1) * this.categoryRequest.take;
     this.loadCategories(); // Fetch data for the new page
   }
-
 
   toggleSortOrder() {
     this.categoryRequest.sort = this.categoryRequest.sort === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
@@ -120,16 +120,16 @@ export class CategoriesComponent implements OnInit {
     }
     const createEditCategoryForm = this.createEditCategoryForm.value;
     this.isEditMode ? this.editCategory(createEditCategoryForm) : this.createCategory(createEditCategoryForm);
-
   }
 
   editCategory(form: any) {
     this._categoryService.editCategory(this.selectedCategory.id, form).subscribe({
-      next:(response: ApiResponse<EditCategoryDTO>) => {
+      next: (response: ApiResponse<EditCategoryDTO>) => {
         if (response && response.success) {
           this.loadCategories();
           this._notificationService.success(response.message);
           this.createEditCategoryForm.reset();
+          this.isEditMode = false;
         } else {
           this._notificationService.info(response.message);
         }
@@ -137,7 +137,7 @@ export class CategoriesComponent implements OnInit {
       error: (errorResponse: ApiResponse<EditCategoryDTO>) => {
         this._errorHandlerService.handleErrors(errorResponse);
       }
-    })
+    });
   }
 
   createCategory(form: any) {
@@ -166,9 +166,44 @@ export class CategoriesComponent implements OnInit {
     setTimeout(() => this.categoryNameInput?.nativeElement.focus(), 0);
   }
 
+  prepareForDelete(category: any): void {
+    this.categoryToDelete = category;
+    const modal = document.getElementById('deleteConfirmationModal');
+    if (modal) {
+      const bootstrapModal = new bootstrap.Modal(modal);
+      bootstrapModal.show();
+    }
+  }
 
-  deleteCategory(cat: any) {
+  deleteCategory(): void {
+    if (this.categoryToDelete) {
+      this._categoryService.deleteCategory(this.categoryToDelete.id).subscribe({
+        next: (response: ApiResponse<any>) => {
+          if (response && response.success) {
+            this._notificationService.success(response.message);
+            this.closeModal();
+            this.loadCategories(); // Refresh the list after deletion
+          } else {
+            this._notificationService.info(response.message);
+          }
+        },
+        error: (errorResponse: ApiResponse<any>) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      });
+    }
+  }
 
+  closeModal(): void {
+    debugger
+    const deleteModalElement = document.getElementById('deleteConfirmationModal');
+    if (deleteModalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(deleteModalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    this.categoryToDelete = null;
   }
 
   cancelEdit() {
@@ -179,5 +214,4 @@ export class CategoriesComponent implements OnInit {
   ngOnDestroy(): void {
     this.nameChangeSubject.complete();
   }
-
 }
