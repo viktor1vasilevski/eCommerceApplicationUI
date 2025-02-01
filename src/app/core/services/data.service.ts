@@ -13,8 +13,8 @@ export class DataService {
     return this.http.get<ResponseType>(url, { params });
   }
 
-  getById<ResponseType>(url: string, id: string | number): Observable<ResponseType> {
-    return this.http.get<ResponseType>(`${url}/${id}`);
+  getById<ResponseType>(url: string): Observable<ResponseType> {
+    return this.http.get<ResponseType>(url);
   }
 
   create<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {
@@ -26,7 +26,7 @@ export class DataService {
     return this.http.put<ResponseType>(fullUrl, data);
   }
 
-  delete<T>(url: string): Observable<T> {
-    return this.http.delete<T>(url);
+  delete<ResponseType>(url: string): Observable<ResponseType> {
+    return this.http.delete<ResponseType>(url);
   }
 }

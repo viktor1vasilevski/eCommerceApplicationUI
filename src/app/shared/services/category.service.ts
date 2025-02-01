@@ -6,7 +6,7 @@ import { CategoryRequest } from '../models/category/category-request';
 import { ApiResponse } from '../../core/models/responses/api-response';
 import { CreateCategoryRequest } from '../../admin/models/category/create-category-request';
 import { CreateCategoryDTO } from '../../admin/models/category/create-category-dto';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { EditCategoryRequest } from '../../admin/models/category/edit-category-request';
 import { EditCategoryDTO } from '../../admin/models/category/edit-category-dto';
 import { CategoryDTO } from '../../admin/models/category/category-dto';
@@ -18,6 +18,12 @@ import { NonGenericApiResponse } from '../../core/models/responses/non-generic-a
 export class CategoryService {
 
   private baseUrl = environment.apiUrl;
+
+  private categoryAddedSource = new BehaviorSubject<boolean>(false);
+  categoryAdded$ = this.categoryAddedSource.asObservable();
+
+  private categoryEditedSource = new BehaviorSubject<boolean>(false);
+  categoryEdited$ = this.categoryEditedSource.asObservable();
 
   constructor(private _dataApiService: DataService) {}
 
@@ -33,9 +39,8 @@ export class CategoryService {
   }
 
   createCategory(request: CreateCategoryRequest): Observable<ApiResponse<CreateCategoryDTO>> {
-    return this._dataApiService.create<CreateCategoryRequest, ApiResponse<CreateCategoryDTO>>(`${this.baseUrl}/category/create`,request);
+    return this._dataApiService.create<CreateCategoryRequest, ApiResponse<CreateCategoryDTO>>(`${this.baseUrl}/category/create`, request);
   }
-
 
   editCategory(id: string, request: EditCategoryRequest): Observable<ApiResponse<EditCategoryDTO>> {
     return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit`, id, request);
@@ -44,5 +49,21 @@ export class CategoryService {
   deleteCategory(id: string): Observable<NonGenericApiResponse> {
     const url = `${this.baseUrl}/category/delete/${id}`;
     return this._dataApiService.delete<NonGenericApiResponse>(url);
+  }
+
+  getCategoryById(id: string): Observable<ApiResponse<EditCategoryDTO>> {
+    const url = `${this.baseUrl}/category/get/${id}`;
+    return this._dataApiService.getById<ApiResponse<EditCategoryDTO>>(url);
+  }
+
+
+
+
+  notifyCategoryAdded() {
+    this.categoryAddedSource.next(true);
+  }
+
+  notifyCategoryEdited() {
+    this.categoryEditedSource.next(true);
   }
 }

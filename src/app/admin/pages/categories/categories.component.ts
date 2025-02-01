@@ -46,11 +46,20 @@ export class CategoriesComponent implements OnInit {
     private _notificationService: NotificationService,
     private router: Router
   ) {
+    this._categoryService.categoryAdded$.subscribe(status => {
+      if(status){
+        this.loadCategories();
+      }
+    })
 
+    this._categoryService.categoryEdited$.subscribe(status => {
+      if(status){
+        this.loadCategories();
+      }
+    })
   }
 
   onNameChange(): void {
-    debugger
     this.nameChangeSubject.next(this.categoryRequest.name);
   }
 

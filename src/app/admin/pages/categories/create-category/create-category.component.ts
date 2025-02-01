@@ -2,6 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
+import { CategoryService } from '../../../../shared/services/category.service';
+import { ApiResponse } from '../../../../core/models/responses/api-response';
+import { CreateCategoryRequest } from '../../../models/category/create-category-request';
+import { CreateCategoryDTO } from '../../../models/category/create-category-dto';
 
 @Component({
   selector: 'app-create-category',
@@ -15,7 +21,10 @@ export class CreateCategoryComponent {
   createCategoryForm: FormGroup;
 
   constructor(private fb: FormBuilder,
-    private router: Router
+    private _notificationService: NotificationService,
+    private _errorHandlerService: ErrorHandlerService,
+    private router: Router,
+    private _categoryService: CategoryService
   ) {
     this.createCategoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -23,7 +32,25 @@ export class CreateCategoryComponent {
   }
 
   onSubmit() {
-
+    if(this.createCategoryForm.valid) {
+      const createCategoryForm = this.createCategoryForm.value;
+      this._categoryService.createCategory(createCategoryForm).subscribe({
+        next:(response: ApiResponse<CreateCategoryDTO>) => {
+          if(response && response.success) {
+            this._notificationService.success(response.message);
+            this._categoryService.notifyCategoryAdded();
+            this.router.navigate(['/admin/categories']);
+          } else {
+            this._notificationService.info(response.message);
+          }
+        },
+        error: (errorResponse: ApiResponse<CreateCategoryDTO>) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      })
+    } else {
+      this._notificationService.info("Invalid form");
+    }
   }
 
   cancelCreate() {
