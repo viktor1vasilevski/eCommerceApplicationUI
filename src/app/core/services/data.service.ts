@@ -21,9 +21,8 @@ export class DataService {
     return this.http.post<ResponseType>(url, data);
   }
 
-  put<RequestType, ResponseType>(url: string, id: string | number, data: RequestType): Observable<ResponseType> {
-    const fullUrl = `${url}/${id}`;
-    return this.http.put<ResponseType>(fullUrl, data);
+  put<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {
+    return this.http.put<ResponseType>(url, data);
   }
 
   delete<ResponseType>(url: string): Observable<ResponseType> {

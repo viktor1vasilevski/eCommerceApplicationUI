@@ -43,7 +43,7 @@ export class CategoryService {
   }
 
   editCategory(id: string, request: EditCategoryRequest): Observable<ApiResponse<EditCategoryDTO>> {
-    return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit`, id, request);
+    return this._dataApiService.put<EditCategoryRequest, ApiResponse<EditCategoryDTO>>(`${this.baseUrl}/category/edit/${id}`, request);
   }
 
   deleteCategory(id: string): Observable<NonGenericApiResponse> {
