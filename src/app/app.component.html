@@ -1,6 +1,5 @@
 <app-header></app-header>
 <div [ngClass]="isAdmin ? 'container-fluid' : 'container'">
-    <!-- Main content (this will change dynamically) -->
     <router-outlet></router-outlet>
 </div>
-<app-footer></app-footer>
+<app-footer *ngIf="!isAdmin"></app-footer>
