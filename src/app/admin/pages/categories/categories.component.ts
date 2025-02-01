@@ -28,6 +28,7 @@ export class CategoriesComponent implements OnInit {
   currentPage: number = 1;
   categories: any;
   categoryToDelete: any = null;
+  isEditOrCreateMode: boolean = false;
 
   @ViewChild('categoryNameInput') categoryNameInput!: ElementRef;
   private nameChangeSubject = new Subject<string>();
@@ -147,12 +148,19 @@ export class CategoriesComponent implements OnInit {
   }
 
   loadCreateCategoryPage() {
+    this.isEditOrCreateMode = true;
     this.router.navigate(['/admin/categories/create'])
     
   }
 
   loadEditCategoryPage(categoryId: string) {
+    this.isEditOrCreateMode = true;
     this.router.navigate([`/admin/categories/edit/${categoryId}`]);
+  }
+
+  onDeactivate() {
+    this.isEditOrCreateMode = false
+    
   }
 
 
