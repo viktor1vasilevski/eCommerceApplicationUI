@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from '../../../shared/services/category.service';
 import { CategoryRequest } from '../../../shared/models/category/category-request';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -11,7 +11,7 @@ import { ApiResponse } from '../../../core/models/responses/api-response';
 import { CategoryDTO } from '../../models/category/category-dto';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 declare var bootstrap: any;
 
 @Component({
@@ -54,8 +54,15 @@ export class CategoriesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.checkRoute();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.checkRoute();
+    });
+  
     this.loadCategories();
-
+  
     this.nameChangeSubject
       .pipe(
         debounceTime(400),
@@ -65,6 +72,15 @@ export class CategoriesComponent implements OnInit {
         this.categoryRequest.skip = 0;
         this.loadCategories();
       });
+  }
+
+  checkRoute(): void {
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/admin/categories/edit') || currentUrl.includes('/admin/categories/create')) {
+      this.isEditOrCreateMode = true;
+    } else {
+      this.isEditOrCreateMode = false;
+    }
   }
 
   loadCategories() {
@@ -159,8 +175,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   onDeactivate() {
-    this.isEditOrCreateMode = false
-    
+    this.isEditOrCreateMode = false;
   }
 
 
