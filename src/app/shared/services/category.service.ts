@@ -56,6 +56,11 @@ export class CategoryService {
     return this._dataApiService.getById<ApiResponse<EditCategoryDTO>>(url);
   }
 
+  getCategoriesDropdownList(): Observable<any> {
+    const url = `${this.baseUrl}/category/getCategoriesDropdownList`;
+    return this._dataApiService.getAll<any>(url);
+  }
+
 
 
 
