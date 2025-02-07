@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { SubcategoryRequest } from '../../../shared/models/subcategory/subcategory-request';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { CategoryService } from '../../../shared/services/category.service';
@@ -48,7 +48,11 @@ export class SubcategoriesComponent implements OnInit {
     private _notificationService: NotificationService,
     private router: Router
   ) {
-
+    this._subcategoryService.subcategoryAdded$.subscribe(status => {
+      if(status){
+        this.loadSubcategories();
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -59,8 +63,8 @@ export class SubcategoriesComponent implements OnInit {
       this.checkRoute();
     });
   
-    this.loadSubcategories();
     this.loadCategoriesDropdownList();
+    this.loadSubcategories();
   
     this.nameChangeSubject
       .pipe(
@@ -109,11 +113,9 @@ export class SubcategoriesComponent implements OnInit {
 
   checkRoute(): void {
     const currentUrl = this.router.url;
-    // if (currentUrl.includes('/admin/categories/edit') || currentUrl.includes('/admin/categories/create')) {
-    //   this.isEditOrCreateMode = true;
-    // } else {
-    //   this.isEditOrCreateMode = false;
-    // }
+    currentUrl.includes('/admin/subcategories/edit') || currentUrl.includes('/admin/subcategories/create') ?
+    this.isEditOrCreateMode = true : 
+    this.isEditOrCreateMode = false;
   }
 
   calculateTotalPages(): void {
@@ -122,7 +124,8 @@ export class SubcategoriesComponent implements OnInit {
   }
 
   loadCreateSubcategoryPage() {
-
+    this.isEditOrCreateMode = true;
+    this.router.navigate(['/admin/subcategories/create'])
   }
 
   toggleSortOrder() {

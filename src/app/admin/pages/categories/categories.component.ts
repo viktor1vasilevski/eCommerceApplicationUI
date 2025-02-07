@@ -86,11 +86,9 @@ export class CategoriesComponent implements OnInit {
 
   checkRoute(): void {
     const currentUrl = this.router.url;
-    if (currentUrl.includes('/admin/categories/edit') || currentUrl.includes('/admin/categories/create')) {
-      this.isEditOrCreateMode = true;
-    } else {
-      this.isEditOrCreateMode = false;
-    }
+    currentUrl.includes('/admin/categories/edit') || currentUrl.includes('/admin/categories/create') ?
+    this.isEditOrCreateMode = true : 
+    this.isEditOrCreateMode = false;
   }
 
   loadCategories() {

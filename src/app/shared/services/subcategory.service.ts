@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { environment } from '../../../enviroments/enviroment.dev';
 import { SubcategoryRequest } from '../models/subcategory/subcategory-request';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -11,6 +11,12 @@ import { HttpParams } from '@angular/common/http';
 export class SubcategoryService {
 
   private baseUrl = environment.apiUrl;
+
+  private subcategoryAddedSource = new BehaviorSubject<boolean>(false);
+  subcategoryAdded$ = this.subcategoryAddedSource.asObservable();
+
+  private subcategoryEditedSource = new BehaviorSubject<boolean>(false);
+  subcategoryEdited$ = this.subcategoryEditedSource.asObservable();
 
   constructor(private _dataApiService: DataService) {}
 
@@ -24,5 +30,20 @@ export class SubcategoryService {
 
     const url = `${this.baseUrl}/subcategory/get`;
     return this._dataApiService.getAll<any>(url, params);
+  }
+
+  createSubcategory(request: any): Observable<any> {
+    return this._dataApiService.create<any, any>(`${this.baseUrl}/subcategory/create`, request);
+  }
+
+
+
+
+  notifySubcategoryAdded() {
+    this.subcategoryAddedSource.next(true);
+  }
+
+  notifySubcategoryEdited() {
+    this.subcategoryEditedSource.next(true);
   }
 }

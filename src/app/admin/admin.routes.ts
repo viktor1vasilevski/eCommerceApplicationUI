@@ -22,6 +22,18 @@ export const adminRoutes: Routes = [
     path: 'subcategories',
     loadComponent: () =>
       import('./pages/subcategories/subcategories.component').then((m) => m.SubcategoriesComponent),
+    children: [
+      {
+        path: 'create',
+        loadComponent: () => import('./pages/subcategories/create-subcategory/create-subcategory.component')
+          .then((m) => m.CreateSubcategoryComponent)
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () => import('./pages/subcategories/edit-subcategory/edit-subcategory.component')
+          .then((m) => m.EditSubcategoryComponent)
+      },
+    ]
   },
   {
     path: 'products',

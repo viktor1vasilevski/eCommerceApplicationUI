@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { CategoryService } from '../../../../shared/services/category.service';
 import { ApiResponse } from '../../../../core/models/responses/api-response';
-import { CreateCategoryRequest } from '../../../models/category/create-category-request';
 import { CreateCategoryDTO } from '../../../models/category/create-category-dto';
 
 @Component({
   selector: 'app-create-category',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './create-category.component.html',
   styleUrl: './create-category.component.css'
 })
@@ -51,10 +50,6 @@ export class CreateCategoryComponent {
     } else {
       this._notificationService.info("Invalid form");
     }
-  }
-
-  cancelCreate() {
-    this.router.navigate(['/admin/categories']);
   }
 
 }
