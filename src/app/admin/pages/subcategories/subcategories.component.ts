@@ -10,6 +10,8 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
 import { NotificationService } from '../../../core/services/notification.service';
 import { SubcategoryService } from '../../../shared/services/subcategory.service';
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
+import { SelectCategoryListItemDTO } from '../../models/category/select-category-list-item-dto';
+import { ApiResponse } from '../../../core/models/responses/api-response';
 
 @Component({
   selector: 'app-subcategories',
@@ -29,7 +31,7 @@ export class SubcategoriesComponent implements OnInit {
   currentPage: number = 1;
 
   categories: any;
-  categoryDropdown: any[] = [];
+  categoryDropdown: SelectCategoryListItemDTO[] | null = [];
 
   @ViewChild('subcategoryNameInput') categoryNameInput!: ElementRef;
   private nameChangeSubject = new Subject<string>();
@@ -98,14 +100,14 @@ export class SubcategoriesComponent implements OnInit {
 
   loadCategoriesDropdownList() {
     this._categoryService.getCategoriesDropdownList().subscribe({
-      next: (response: any) => {
+      next: (response: ApiResponse<SelectCategoryListItemDTO[]>) => {
         if(response && response.success){
           this.categoryDropdown = response.data;
         } else {
           this._notificationService.info(response.message)
         }
       },
-      error: (errorResponse: any) => {
+      error: (errorResponse: ApiResponse<SelectCategoryListItemDTO[]>) => {
         this._errorHandlerService.handleErrors(errorResponse);
       }
     })
@@ -158,7 +160,8 @@ export class SubcategoriesComponent implements OnInit {
   }
 
   loadEditSubcategoryPage(id: any) {
-
+    this.isEditOrCreateMode = true;
+    this.router.navigate([`/admin/subcategories/edit/${id}`]);
   }
 
   prepareForDelete(el: any) {

@@ -11,6 +11,7 @@ import { EditCategoryRequest } from '../../admin/models/category/edit-category-r
 import { EditCategoryDTO } from '../../admin/models/category/edit-category-dto';
 import { CategoryDTO } from '../../admin/models/category/category-dto';
 import { NonGenericApiResponse } from '../../core/models/responses/non-generic-api-response';
+import { SelectCategoryListItemDTO } from '../../admin/models/category/select-category-list-item-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -56,9 +57,9 @@ export class CategoryService {
     return this._dataApiService.getById<ApiResponse<EditCategoryDTO>>(url);
   }
 
-  getCategoriesDropdownList(): Observable<any> {
+  getCategoriesDropdownList(): Observable<ApiResponse<SelectCategoryListItemDTO[]>> {
     const url = `${this.baseUrl}/category/getCategoriesDropdownList`;
-    return this._dataApiService.getAll<any>(url);
+    return this._dataApiService.getAll<ApiResponse<SelectCategoryListItemDTO[]>>(url);
   }
 
 

@@ -50,7 +50,6 @@ export class RegisterComponent {
   
     this._authService.registerUser(registerForm).subscribe({
       next: ({ data, success, message }: ApiResponse<RegisterDTO>) => {
-        debugger
         this.isLoading = false;
   
         if (!success || !data?.username) {

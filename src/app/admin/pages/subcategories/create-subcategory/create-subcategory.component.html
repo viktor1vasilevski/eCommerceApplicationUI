@@ -7,7 +7,7 @@
             <div class="form-group mb-3">
                 <label for="name" class="form-label fw-semibold">Name</label>
                 <input type="text" id="name" class="form-control rounded-3" formControlName="name"
-                    placeholder="Create category name" #categoryNameInput />
+                    placeholder="Create subcategory name" #categoryNameInput />
                 <div *ngIf="createSubcategoryForm.get('name')?.invalid && createSubcategoryForm.get('name')?.touched"
                     class="text-danger mt-1">
                     <small *ngIf="createSubcategoryForm.get('name')?.errors?.['required']">Subcategory
@@ -25,6 +25,7 @@
             <div class="form-group mb-3">
                 <label for="category">Category</label>
                 <select id="category" formControlName="categoryId" class="form-control">
+                    <option value="" disabled selected>Select category</option>
                     <option *ngFor="let category of categoryDropdown" [value]="category.id">{{ category.name }}</option>
                 </select>
                 <div *ngIf="createSubcategoryForm.get('category')?.invalid && createSubcategoryForm.get('category')?.touched"

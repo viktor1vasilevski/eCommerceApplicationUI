@@ -55,7 +55,6 @@ export class LoginComponent {
   
     this._authService.loginUser(loginForm).subscribe({
       next: ({ data, success, message }: ApiResponse<LoginDTO>) => {
-        debugger
         this.isLoading = false;
         
         if (!success || !data) {

@@ -160,7 +160,6 @@ export class CategoriesComponent implements OnInit {
   }
 
   closeModal(): void {
-    debugger
     const deleteModalElement = document.getElementById('deleteConfirmationModal');
     if (deleteModalElement) {
       const modalInstance = bootstrap.Modal.getInstance(deleteModalElement);
