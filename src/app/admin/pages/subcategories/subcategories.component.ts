@@ -55,6 +55,12 @@ export class SubcategoriesComponent implements OnInit {
         this.loadSubcategories();
       }
     })
+
+    this._subcategoryService.subcategoryEdited$.subscribe(status => {
+      if(status){
+        this.loadSubcategories();
+      }
+    })
   }
 
   ngOnInit(): void {

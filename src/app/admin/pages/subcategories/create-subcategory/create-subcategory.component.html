@@ -28,7 +28,7 @@
                     <option value="" disabled selected>Select category</option>
                     <option *ngFor="let category of categoryDropdown" [value]="category.id">{{ category.name }}</option>
                 </select>
-                <div *ngIf="createSubcategoryForm.get('category')?.invalid && createSubcategoryForm.get('category')?.touched"
+                <div *ngIf="createSubcategoryForm.get('categoryId')?.invalid && createSubcategoryForm.get('categoryId')?.touched"
                     class="text-danger">
                     <small>Category is required.</small>
                 </div>

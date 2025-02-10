@@ -32,11 +32,18 @@ export class SubcategoryService {
     return this._dataApiService.getAll<any>(url, params);
   }
 
+  getSubcategoryById(id: string): Observable<any> {
+    const url = `${this.baseUrl}/subcategory/get/${id}`;
+    return this._dataApiService.getById<any>(url);
+  }
+
   createSubcategory(request: any): Observable<any> {
     return this._dataApiService.create<any, any>(`${this.baseUrl}/subcategory/create`, request);
   }
 
-
+  editSubcategory(id: string, request: any): Observable<any> {
+    return this._dataApiService.put<any, any>(`${this.baseUrl}/subcategory/edit/${id}`, request);
+  }
 
 
   notifySubcategoryAdded() {
