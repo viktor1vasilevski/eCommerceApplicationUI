@@ -4,6 +4,7 @@ import { environment } from '../../../enviroments/enviroment.dev';
 import { SubcategoryRequest } from '../models/subcategory/subcategory-request';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { NonGenericApiResponse } from '../../core/models/responses/non-generic-api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,11 @@ export class SubcategoryService {
 
   editSubcategory(id: string, request: any): Observable<any> {
     return this._dataApiService.put<any, any>(`${this.baseUrl}/subcategory/edit/${id}`, request);
+  }
+
+  deleteSubcategory(id: string): Observable<NonGenericApiResponse> {
+    const url = `${this.baseUrl}/subcategory/delete/${id}`;
+    return this._dataApiService.delete<NonGenericApiResponse>(url);
   }
 
 

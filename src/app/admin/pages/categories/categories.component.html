@@ -38,6 +38,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr *ngIf="categories.length === 0">
+                                    <td colspan="6" class="text-center text-muted">
+                                        No categories found.
+                                    </td>
+                                </tr>
                                 <tr *ngFor="let category of categories">
                                     <td>{{ category.name }}</td>
                                     <td>{{ category.created | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -64,9 +69,9 @@
                         </table>
                     </div>
 
-                    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages"
-                        [itemsPerPage]="categoryRequest.take" (pageChange)="changePage($event)"
-                        (itemsPerPageChange)="onItemsPerPageChange($event)">
+                    <app-pagination *ngIf="categories.length !== 0" [currentPage]="currentPage"
+                        [totalPages]="totalPages" [itemsPerPage]="categoryRequest.take"
+                        (pageChange)="changePage($event)" (itemsPerPageChange)="onItemsPerPageChange($event)">
                     </app-pagination>
                 </div>
             </div>

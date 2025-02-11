@@ -12,6 +12,8 @@ import { SubcategoryService } from '../../../shared/services/subcategory.service
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { SelectCategoryListItemDTO } from '../../models/category/select-category-list-item-dto';
 import { ApiResponse } from '../../../core/models/responses/api-response';
+import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-subcategories',
@@ -29,6 +31,7 @@ export class SubcategoriesComponent implements OnInit {
   totalCount: number = 0;
   totalPages: number[] = [];
   currentPage: number = 1;
+  subcategoryToDelete: any;
 
   categories: any;
   categoryDropdown: SelectCategoryListItemDTO[] | null = [];
@@ -170,16 +173,52 @@ export class SubcategoriesComponent implements OnInit {
     this.router.navigate([`/admin/subcategories/edit/${id}`]);
   }
 
-  prepareForDelete(el: any) {
-
+  prepareForDelete(subcategory: any) {
+    this.subcategoryToDelete = subcategory;
+    const modal = document.getElementById('deleteConfirmationModal');
+    if (modal) {
+      const bootstrapModal = new bootstrap.Modal(modal);
+      bootstrapModal.show();
+    }
   }
 
-  deleteCategory() {
+  deleteSubcategory() {
+    if (this.subcategoryToDelete) {
+      this._subcategoryService.deleteSubcategory(this.subcategoryToDelete.id).subscribe({
+        next: (response: NonGenericApiResponse) => {
+          if (response && response.success) {
+            this._notificationService.success(response.message);
+            this.closeModal();
+            this.loadSubcategories();
+          } else {
+            this._notificationService.info(response.message);
+          }
+        },
+        error: (errorResponse: NonGenericApiResponse) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      });
+    }
+  }
 
+  closeModal(): void {
+    const deleteModalElement = document.getElementById('deleteConfirmationModal');
+    if (deleteModalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(deleteModalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    this.categoryToDelete = null;
   }
 
   onDeactivate() {
+    this.isEditOrCreateMode = false;
+  }
 
+
+  ngOnDestroy(): void {
+    this.nameChangeSubject.complete();
   }
 
 }
