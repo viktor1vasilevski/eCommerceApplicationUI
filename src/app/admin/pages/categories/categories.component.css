@@ -44,3 +44,10 @@
 .card-body .dropdown-menu {
   pointer-events: auto;
 }
+
+
+.uncategorized {
+  opacity: 0.5;
+  pointer-events: none;
+}
+

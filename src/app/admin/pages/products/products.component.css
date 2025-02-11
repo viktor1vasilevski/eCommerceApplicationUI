@@ -1,0 +1,47 @@
+.dropdown-item {
+    cursor: pointer;
+  }
+  
+  .position-relative {
+    position: relative;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    pointer-events: all;
+  }
+  
+  .col-md-8 {
+    z-index: 2;
+  }
+  
+  .col-md-4 {
+    z-index: 3;
+  }
+  
+  .disabled-list {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  
+  .table-container {
+    pointer-events: auto;
+  }
+  
+  .dimmed {
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .card-body .dropdown,
+  .card-body .dropdown-menu {
+    pointer-events: auto;
+  }
+  

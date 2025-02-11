@@ -54,7 +54,8 @@
                                         No subcategories found.
                                     </td>
                                 </tr>
-                                <tr *ngFor="let subcategory of subcategories">
+                                <tr *ngFor="let subcategory of subcategories"
+                                    [class.uncategorized]="subcategory.name === 'UNCATEGORIZED'">
                                     <td>{{ subcategory.name }}</td>
                                     <td>{{ subcategory.category }}</td>
                                     <td>{{ subcategory.created | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -64,7 +65,7 @@
                                         '/' }}</td>
                                     <td>{{ subcategory.lastModifiedBy ? subcategory.lastModifiedBy : '/' }}</td>
                                     <td class="text-end">
-                                        <div class="dropdown">
+                                        <div class="dropdown" *ngIf="subcategory.name !== 'UNCATEGORIZED'">
                                             <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
                                                 <i class="bi bi-three-dots-vertical"></i>

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { SubcategoryRequest } from '../../../shared/models/subcategory/subcategory-request';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { CategoryService } from '../../../shared/services/category.service';
@@ -192,10 +192,12 @@ export class SubcategoriesComponent implements OnInit {
             this.loadSubcategories();
           } else {
             this._notificationService.info(response.message);
+            this.closeModal();
           }
         },
         error: (errorResponse: NonGenericApiResponse) => {
           this._errorHandlerService.handleErrors(errorResponse);
+          this.closeModal();
         }
       });
     }

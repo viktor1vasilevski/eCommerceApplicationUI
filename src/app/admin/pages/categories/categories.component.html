@@ -43,7 +43,8 @@
                                         No categories found.
                                     </td>
                                 </tr>
-                                <tr *ngFor="let category of categories">
+                                <tr *ngFor="let category of categories"
+                                    [class.uncategorized]="category.name === 'UNCATEGORIZED'">
                                     <td>{{ category.name }}</td>
                                     <td>{{ category.created | date:'dd/MM/yyyy HH:mm' }}</td>
                                     <td>{{ category.createdBy }}</td>
@@ -51,7 +52,7 @@
                                         '/' }}</td>
                                     <td>{{ category.lastModifiedBy ? category.lastModifiedBy : '/' }}</td>
                                     <td class="text-end">
-                                        <div class="dropdown">
+                                        <div class="dropdown" *ngIf="category.name !== 'UNCATEGORIZED'">
                                             <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
                                                 <i class="bi bi-three-dots-vertical"></i>
@@ -63,6 +64,7 @@
                                                         (click)="prepareForDelete(category)">Delete</a></li>
                                             </ul>
                                         </div>
+
                                     </td>
                                 </tr>
                             </tbody>

@@ -1,1 +1,111 @@
-<p>create-product works!</p>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Create Product</h4>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="createProductForm" (ngSubmit)="onSubmit()">
+
+            <div class="row">
+                <!-- Name -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="name" class="form-label fw-semibold">Name</label>
+                        <input type="text" id="name" class="form-control rounded-3" formControlName="name"
+                            placeholder="Enter product name" />
+                    </div>
+                </div>
+
+                <!-- Brand -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="brand" class="form-label fw-semibold">Brand</label>
+                        <input type="text" id="brand" class="form-control rounded-3" formControlName="brand"
+                            placeholder="Enter brand name" />
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="category" class="form-label fw-semibold">Category</label>
+                        <input type="text" id="category" class="form-control rounded-3" formControlName="category"
+                            placeholder="Enter category" />
+                    </div>
+                </div>
+
+                <!-- Subcategory -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="subcategory" class="form-label fw-semibold">Subcategory</label>
+                        <input type="text" id="subcategory" class="form-control rounded-3" formControlName="subcategory"
+                            placeholder="Enter subcategory" />
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="description" class="form-label fw-semibold">Description</label>
+                        <textarea id="description" class="form-control rounded-3" formControlName="description"
+                            placeholder="Enter description"></textarea>
+                    </div>
+                </div>
+
+                <!-- Unit Price -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="unitPrice" class="form-label fw-semibold">Unit Price</label>
+                        <input type="number" id="unitPrice" class="form-control rounded-3" formControlName="unitPrice"
+                            placeholder="Enter unit price" />
+                    </div>
+                </div>
+
+                <!-- Unit Quantity -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="unitQuantity" class="form-label fw-semibold">Unit Quantity</label>
+                        <input type="number" id="unitQuantity" class="form-control rounded-3"
+                            formControlName="unitQuantity" placeholder="Enter unit quantity" />
+                    </div>
+                </div>
+
+                <!-- Volume -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="volume" class="form-label fw-semibold">Volume</label>
+                        <input type="text" id="volume" class="form-control rounded-3" formControlName="volume"
+                            placeholder="Enter volume (e.g., 500ml)" />
+                    </div>
+                </div>
+
+                <!-- Scent -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="scent" class="form-label fw-semibold">Scent</label>
+                        <input type="text" id="scent" class="form-control rounded-3" formControlName="scent"
+                            placeholder="Enter scent" />
+                    </div>
+                </div>
+
+                <!-- Edition -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="edition" class="form-label fw-semibold">Edition</label>
+                        <input type="text" id="edition" class="form-control rounded-3" formControlName="edition"
+                            placeholder="Enter edition (e.g., Limited, Special)" />
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="createProductForm.invalid">Create</button>
+                <button type="button" class="btn btn-outline-secondary" routerLink="/admin/categories">
+                    Cancel
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
