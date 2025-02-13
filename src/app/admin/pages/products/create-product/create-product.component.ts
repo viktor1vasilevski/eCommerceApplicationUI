@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
+import { ProductService } from '../../../../shared/services/product.service';
 
 @Component({
   selector: 'app-create-product',
@@ -20,6 +21,7 @@ export class CreateProductComponent implements OnInit {
   categoryDropdown: any[] = [];
 
   constructor(private fb: FormBuilder,
+    private _productService: ProductService,
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService
@@ -28,11 +30,11 @@ export class CreateProductComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(100)]],
       brand: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      unitPrice: [null, [Validators.required, Validators.min(0.01)]],
-      unitQuantity: [null, [Validators.required, Validators.min(1)]],
-      volume: [null, [Validators.required, Validators.min(1)]],
-      scent: [''],
-      edition: [''],
+      unitPrice: ['', [Validators.required, Validators.min(0.01)]],
+      unitQuantity: ['', [Validators.required, Validators.min(1)]],
+      volume: [null, [Validators.min(1)]],
+      scent: [null, Validators.maxLength(100)],
+      edition: ['', Validators.maxLength(100)],
       image: [ '' , [Validators.required]],
       subcategoryId: ['', [Validators.required]],
     });
@@ -75,7 +77,22 @@ export class CreateProductComponent implements OnInit {
   }
 
   onSubmit() {
+    debugger
+    // if(!this.createProductForm.valid) {
+    //   this._notificationService.info("Invalid form");
+    //   return;
+    // }
 
+    const createProductForm = this.createProductForm.value;
+    this._productService.createProduct(createProductForm).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        
+      },
+      error: (errorResponse: any) => {
+        console.log(errorResponse);
+      }
+    });
   }
 
 }

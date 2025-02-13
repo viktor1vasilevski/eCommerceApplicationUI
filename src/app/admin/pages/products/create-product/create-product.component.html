@@ -61,6 +61,11 @@
                         <input type="text" id="edition" class="form-control rounded-3" formControlName="edition"
                             placeholder="Enter edition (e.g., Limited, Special)" />
                     </div>
+                    <div *ngIf="createProductForm.get('edition')?.invalid && createProductForm.get('edition')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('edition')?.errors?.['maxlength']">Edition name cannot
+                            exceed 100 characters.</small>
+                    </div>
                 </div>
 
                 <!-- Description -->
@@ -86,6 +91,13 @@
                         <input type="number" id="unitPrice" class="form-control rounded-3" formControlName="unitPrice"
                             placeholder="Enter unit price" />
                     </div>
+                    <div *ngIf="createProductForm.get('unitPrice')?.invalid && createProductForm.get('unitPrice')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('unitPrice')?.errors?.['required']">Unit price is
+                            required.</small>
+                        <small *ngIf="createProductForm.get('unitPrice')?.errors?.['minlength']">Unit price must be
+                            greater than zero.</small>
+                    </div>
                 </div>
 
                 <!-- Unit Quantity -->
@@ -94,6 +106,14 @@
                         <label for="unitQuantity" class="form-label fw-semibold">Unit Quantity</label>
                         <input type="number" id="unitQuantity" class="form-control rounded-3"
                             formControlName="unitQuantity" placeholder="Enter unit quantity" />
+                    </div>
+                    <div *ngIf="createProductForm.get('unitQuantity')?.invalid && createProductForm.get('unitQuantity')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('unitQuantity')?.errors?.['required']">Unit quantity is
+                            required.</small>
+                        <small *ngIf="createProductForm.get('unitQuantity')?.errors?.['minlength']">Unit quantity must
+                            be
+                            greater than zero.</small>
                     </div>
                 </div>
 
@@ -104,6 +124,11 @@
                         <input type="text" id="scent" class="form-control rounded-3" formControlName="scent"
                             placeholder="Enter scent" />
                     </div>
+                    <div *ngIf="createProductForm.get('scent')?.invalid && createProductForm.get('scent')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('scent')?.errors?.['maxlength']">Scent name cannot
+                            exceed 100 characters.</small>
+                    </div>
                 </div>
 
                 <!-- Volume -->
@@ -113,6 +138,11 @@
                         <input type="text" id="volume" class="form-control rounded-3" formControlName="volume"
                             placeholder="Enter volume (e.g., 500ml)" />
                     </div>
+                    <div *ngIf="createProductForm.get('volume')?.invalid && createProductForm.get('volume')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('volume')?.errors?.['min']">Volume must be greater than
+                            zero.</small>
+                    </div>
                 </div>
             </div>
 
@@ -121,10 +151,10 @@
                 <input type="file" id="image" (change)="onFileSelected($event)" class="form-control" />
                 <!-- <div *ngIf="image?.invalid && image?.touched" class="text-danger">
                     <small *ngIf="image?.errors?.['required']">Image is required.</small>
-                </div>-->
+                </div>
                 <div *ngIf="imagePreviewUrl">
                     <img [src]="imagePreviewUrl" alt="Image Preview" class="img-fluid mt-2" />
-                </div>
+                </div> -->
             </div>
 
             <div class="d-grid gap-2">
