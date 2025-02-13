@@ -13,6 +13,14 @@
                         <input type="text" id="name" class="form-control rounded-3" formControlName="name"
                             placeholder="Enter product name" />
                     </div>
+                    <div *ngIf="createProductForm.get('name')?.invalid && createProductForm.get('name')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('name')?.errors?.['required']">Product
+                            name is
+                            required.</small>
+                        <small *ngIf="createProductForm.get('name')?.errors?.['maxlength']">Product name cannot exceed
+                            100 characters.</small>
+                    </div>
                 </div>
 
                 <!-- Brand -->
@@ -22,23 +30,36 @@
                         <input type="text" id="brand" class="form-control rounded-3" formControlName="brand"
                             placeholder="Enter brand name" />
                     </div>
-                </div>
-
-                <!-- Category -->
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label for="category" class="form-label fw-semibold">Category</label>
-                        <input type="text" id="category" class="form-control rounded-3" formControlName="category"
-                            placeholder="Enter category" />
+                    <div *ngIf="createProductForm.get('brand')?.invalid && createProductForm.get('brand')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('brand')?.errors?.['required']">Brand
+                            name is
+                            required.</small>
+                        <small *ngIf="createProductForm.get('brand')?.errors?.['maxlength']">Brand name cannot exceed 50
+                            characters.</small>
                     </div>
                 </div>
 
                 <!-- Subcategory -->
                 <div class="col-md-6">
+                    <label for="category" class="form-label fw-semibold">Subcategory</label>
+                    <select id="subcategory" formControlName="subcategoryId" class="form-control">
+                        <option value="" disabled selected>Select subcategory</option>
+                        <option *ngFor="let subcategory of categoryDropdown" [value]="subcategory.id">{{
+                            subcategory.name }}</option>
+                    </select>
+                    <div *ngIf="createProductForm.get('subcategoryId')?.invalid && createProductForm.get('subcategoryId')?.touched"
+                        class="text-danger">
+                        <small>Subcategory is required.</small>
+                    </div>
+                </div>
+
+                <!-- Edition -->
+                <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="subcategory" class="form-label fw-semibold">Subcategory</label>
-                        <input type="text" id="subcategory" class="form-control rounded-3" formControlName="subcategory"
-                            placeholder="Enter subcategory" />
+                        <label for="edition" class="form-label fw-semibold">Edition</label>
+                        <input type="text" id="edition" class="form-control rounded-3" formControlName="edition"
+                            placeholder="Enter edition (e.g., Limited, Special)" />
                     </div>
                 </div>
 
@@ -49,10 +70,17 @@
                         <textarea id="description" class="form-control rounded-3" formControlName="description"
                             placeholder="Enter description"></textarea>
                     </div>
+                    <div *ngIf="createProductForm.get('description')?.invalid && createProductForm.get('description')?.touched"
+                        class="text-danger mt-1">
+                        <small *ngIf="createProductForm.get('description')?.errors?.['required']">Description is
+                            required.</small>
+                        <small *ngIf="createProductForm.get('description')?.errors?.['maxlength']">Description cannot
+                            exceed 500 characters.</small>
+                    </div>
                 </div>
 
                 <!-- Unit Price -->
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="unitPrice" class="form-label fw-semibold">Unit Price</label>
                         <input type="number" id="unitPrice" class="form-control rounded-3" formControlName="unitPrice"
@@ -61,20 +89,11 @@
                 </div>
 
                 <!-- Unit Quantity -->
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="unitQuantity" class="form-label fw-semibold">Unit Quantity</label>
                         <input type="number" id="unitQuantity" class="form-control rounded-3"
                             formControlName="unitQuantity" placeholder="Enter unit quantity" />
-                    </div>
-                </div>
-
-                <!-- Volume -->
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="volume" class="form-label fw-semibold">Volume</label>
-                        <input type="text" id="volume" class="form-control rounded-3" formControlName="volume"
-                            placeholder="Enter volume (e.g., 500ml)" />
                     </div>
                 </div>
 
@@ -87,21 +106,30 @@
                     </div>
                 </div>
 
-                <!-- Edition -->
+                <!-- Volume -->
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="edition" class="form-label fw-semibold">Edition</label>
-                        <input type="text" id="edition" class="form-control rounded-3" formControlName="edition"
-                            placeholder="Enter edition (e.g., Limited, Special)" />
+                        <label for="volume" class="form-label fw-semibold">Volume</label>
+                        <input type="text" id="volume" class="form-control rounded-3" formControlName="volume"
+                            placeholder="Enter volume (e.g., 500ml)" />
                     </div>
                 </div>
             </div>
 
-
+            <div class="form-group mb-3">
+                <label for="image">Image</label>
+                <input type="file" id="image" (change)="onFileSelected($event)" class="form-control" />
+                <!-- <div *ngIf="image?.invalid && image?.touched" class="text-danger">
+                    <small *ngIf="image?.errors?.['required']">Image is required.</small>
+                </div>-->
+                <div *ngIf="imagePreviewUrl">
+                    <img [src]="imagePreviewUrl" alt="Image Preview" class="img-fluid mt-2" />
+                </div>
+            </div>
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary" [disabled]="createProductForm.invalid">Create</button>
-                <button type="button" class="btn btn-outline-secondary" routerLink="/admin/categories">
+                <button type="button" class="btn btn-outline-secondary" routerLink="/admin/products">
                     Cancel
                 </button>
             </div>

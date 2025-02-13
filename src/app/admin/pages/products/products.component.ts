@@ -7,8 +7,8 @@ import { PaginationComponent } from "../../components/pagination/pagination.comp
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterOutlet, 
-    PaginationComponent, RouterOutlet, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, PaginationComponent,
+     RouterOutlet, ReactiveFormsModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -60,7 +60,7 @@ export class ProductsComponent {
   }
 
   onDeactivate() {
-
+    this.isEditOrCreateMode = false;
   }
 
   deleteProduct() {
