@@ -30,11 +30,7 @@ export class ProductsComponent implements OnInit {
   categoriesDrowdown: any[] = [];
   subcategoriesDrowdown: any[] = [];
 
-  private nameChangeSubject = new Subject<string>();
-  private brandChangeSubject = new Subject<string>();
-  private descChangeSubject = new Subject<string>();
-  private scentChangeSubject = new Subject<string>();
-  private editionChangeSubject = new Subject<string>();
+  private filterChangeSubject = new Subject<string>();
 
   filters = {
     name: '',
@@ -79,27 +75,10 @@ export class ProductsComponent implements OnInit {
     this.loadCategoriesDropdownList();
     this.loadSubcategoriesDropdownList();
 
-    this.nameChangeSubject.pipe(debounceTime(400),distinctUntilChanged()).subscribe(() => {
-      this.productRequest.skip = 0;
-      this.loadProducts();
-    });
-
-    this.brandChangeSubject.pipe(debounceTime(400),distinctUntilChanged()).subscribe(() => {
-      this.productRequest.skip = 0;
-      this.loadProducts();
-    });
-
-    this.descChangeSubject.pipe(debounceTime(400),distinctUntilChanged()).subscribe(() => {
-      this.productRequest.skip = 0;
-      this.loadProducts();
-    });
-
-    this.scentChangeSubject.pipe(debounceTime(400),distinctUntilChanged()).subscribe(() => {
-      this.productRequest.skip = 0;
-      this.loadProducts();
-    });
-
-    this.editionChangeSubject.pipe(debounceTime(400),distinctUntilChanged()).subscribe(() => {
+    this.filterChangeSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(() => {
       this.productRequest.skip = 0;
       this.loadProducts();
     });
@@ -180,34 +159,8 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
-  onNameChange(): void {
-    this.nameChangeSubject.next(this.productRequest.name);
-  }
-
-  onFilterChange(type: string) : void {
-    switch (type) {
-      case 'name':
-        this.nameChangeSubject.next(this.productRequest.name);
-        break;
-      case 'brand':
-          this.brandChangeSubject.next(this.productRequest.brand);
-        break;
-      case 'desc':
-          this.descChangeSubject.next(this.productRequest.description);
-        break;
-      case 'scent':
-          this.scentChangeSubject.next(this.productRequest.scent);
-        break;
-      case 'edition':
-          this.editionChangeSubject.next(this.productRequest.edition);
-        break;
-      default:
-        break;
-    }
-  }
-
-  onProductChange(event: any) {
-
+  onFilterChange(): void {
+    this.filterChangeSubject.next(JSON.stringify(this.productRequest));
   }
 
   loadEditProductPage(id: any) {

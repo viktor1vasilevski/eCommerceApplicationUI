@@ -12,34 +12,35 @@
                         <div class="col-md-3">
                             <label for="nameFilter" class="form-label">Name</label>
                             <input type="text" id="nameFilter" class="form-control" [(ngModel)]="productRequest.name"
-                                (input)="onFilterChange('name')" placeholder="Filter by name">
+                                (input)="onFilterChange()" placeholder="Filter by name">
                         </div>
 
                         <div class="col-md-3">
                             <label for="brandFilter" class="form-label">Brand</label>
                             <input type="text" id="brandFilter" class="form-control" [(ngModel)]="productRequest.brand"
-                                (input)="onFilterChange('brand')" placeholder="Filter by brand">
+                                (input)="onFilterChange()" placeholder="Filter by brand">
                         </div>
 
                         <div class="col-md-3">
                             <label for="descriptionFilter" class="form-label">Description</label>
                             <input type="text" id="descriptionFilter" class="form-control"
-                                [(ngModel)]="productRequest.description" (input)="onFilterChange('desc')"
+                                [(ngModel)]="productRequest.description" (input)="onFilterChange()"
                                 placeholder="Filter by description">
                         </div>
 
                         <div class="col-md-3">
                             <label for="scentFilter" class="form-label">Scent</label>
                             <input type="text" id="scentFilter" class="form-control" [(ngModel)]="productRequest.scent"
-                                (input)="onFilterChange('scent')" placeholder="Filter by scent">
+                                (input)="onFilterChange()" placeholder="Filter by scent">
                         </div>
 
                         <div class="col-md-3">
                             <label for="editionFilter" class="form-label">Edition</label>
                             <input type="text" id="editionFilter" class="form-control"
-                                [(ngModel)]="productRequest.edition" (input)="onFilterChange('edition')"
+                                [(ngModel)]="productRequest.edition" (input)="onFilterChange()"
                                 placeholder="Filter by edition">
                         </div>
+
 
                         <!-- Subcategory Filter -->
                         <div class="col-md-3">
