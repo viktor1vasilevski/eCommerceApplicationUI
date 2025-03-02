@@ -1,6 +1,96 @@
 <div class="container-fluid mt-4">
     <div class="row g-4">
         <div [ngClass]="isEditOrCreateMode ? 'col-md-8' : 'col-md-12'" class="position-relative">
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Filters</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <!-- Name Filter -->
+                        <div class="col-md-3">
+                            <label for="nameFilter" class="form-label">Name</label>
+                            <input type="text" id="nameFilter" class="form-control" [(ngModel)]="productRequest.name"
+                                (input)="onFilterChange('name')" placeholder="Filter by name">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="brandFilter" class="form-label">Brand</label>
+                            <input type="text" id="brandFilter" class="form-control" [(ngModel)]="productRequest.brand"
+                                (input)="onFilterChange('brand')" placeholder="Filter by brand">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="descriptionFilter" class="form-label">Description</label>
+                            <input type="text" id="descriptionFilter" class="form-control"
+                                [(ngModel)]="productRequest.description" (input)="onFilterChange('desc')"
+                                placeholder="Filter by description">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="scentFilter" class="form-label">Scent</label>
+                            <input type="text" id="scentFilter" class="form-control" [(ngModel)]="productRequest.scent"
+                                (input)="onFilterChange('scent')" placeholder="Filter by scent">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="editionFilter" class="form-label">Edition</label>
+                            <input type="text" id="editionFilter" class="form-control"
+                                [(ngModel)]="productRequest.edition" (input)="onFilterChange('edition')"
+                                placeholder="Filter by edition">
+                        </div>
+
+                        <!-- Subcategory Filter -->
+                        <div class="col-md-3">
+                            <label for="subcategoryFilter" class="form-label">Subcategory</label>
+                            <select id="subcategoryFilter" class="form-select"
+                                (change)="onDropdownItemChange($event, 'subcategory')">
+                                <option value="" [disabled]="true">Filter by subcategory</option>
+                                <option value="">All</option>
+                                <option *ngFor="let subcategory of subcategoriesDrowdown" [value]="subcategory.id">
+                                    {{ subcategory.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="col-md-3">
+                            <label for="categoryFilter" class="form-label">Category</label>
+                            <select id="categoryFilter" class="form-select"
+                                (change)="onDropdownItemChange($event, 'category')">
+                                <option value="" [disabled]="true">Filter by category</option>
+                                <option value="">All</option>
+                                <option *ngFor="let category of categoriesDrowdown" [value]="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Price Filter -->
+                        <div class="col-md-3">
+                            <label for="priceFilter" class="form-label">Price</label>
+                            <select id="priceFilter" class="form-select" (change)="applyFilters($event, 'unitPrice')">
+                                <option value="" selected disabled>Sort by price</option>
+                                <option value="asc">Lowest to highest</option>
+                                <option value="desc">Highest to lowest</option>
+                            </select>
+                        </div>
+
+                        <!-- Quantity Filter -->
+                        <div class="col-md-3">
+                            <label for="quantityFilter" class="form-label">Quantity</label>
+                            <select id="quantityFilter" class="form-select"
+                                (change)="applyFilters($event, 'unitQuantity')">
+                                <option value="" selected disabled>Sort by quantity</option>
+                                <option value="asc">Lowest to highest</option>
+                                <option value="desc">Highest to lowest</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
             <!-- Product List -->
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -19,23 +109,32 @@
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Image</th>
+                                    <th>Img</th>
                                     <th>Name</th>
                                     <th>Brand</th>
-                                    <th>Description</th>
-                                    <th>Subcategory</th>
-                                    <th>Category</th>
-                                    <th>UnitPrice</th>
-                                    <th>UnitQuantity</th>
-                                    <th>Volume</th>
+                                    <th>Desc</th>
+                                    <th>Subcat</th>
+                                    <th>Cat</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Vol</th>
                                     <th>Scent</th>
-                                    <th>Edition</th>
-                                    <th>Created</th>
-                                    <th>Created By</th>
-                                    <th>Last Modified</th>
-                                    <th>Last Modified By</th>
+                                    <th>Ed.</th>
+                                    <th *ngIf="products.length !== 0" (click)="toggleSortOrder('created')"
+                                        style="cursor: pointer;">
+                                        Created
+                                        <i *ngIf="products.length !== 0 && productRequest.sortBy == 'created'"
+                                            [ngClass]="productRequest.sortDirection === 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'"></i>
+                                    </th>
+                                    <th *ngIf="products.length !== 0 " (click)="toggleSortOrder('lastmodified')"
+                                        style="cursor: pointer;">
+                                        Modified
+                                        <i *ngIf="products.length !== 0 && productRequest.sortBy == 'lastmodified'"
+                                            [ngClass]="productRequest.sortDirection === 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'"></i>
+                                    </th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <tr *ngIf="products.length === 0">
                                     <td colspan="6" class="text-center text-muted">
@@ -44,7 +143,7 @@
                                 </tr>
                                 <tr *ngFor="let product of products">
                                     <td>
-                                        <img [src]="product.imageBase64" style="width: 200px; height: 200px;" />
+                                        <img [src]="product.imageBase64" style="width: 80px; height: 80px;" />
                                     </td>
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.brand }}</td>
@@ -57,11 +156,9 @@
                                     <td>{{ product.scent }}</td>
                                     <td>{{ product.edition }}</td>
                                     <td>{{ product.created | date:'dd/MM/yyyy HH:mm' }}</td>
-                                    <td>{{ product.createdBy }}</td>
                                     <td>{{ product.lastModified ? (product.lastModified |
                                         date:'dd/MM/yyyyHH:mm') :
                                         '/' }}</td>
-                                    <td>{{ product.lastModifiedBy ? product.lastModifiedBy : '/' }}</td>
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"

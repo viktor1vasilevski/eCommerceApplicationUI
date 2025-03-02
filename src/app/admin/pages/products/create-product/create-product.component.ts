@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
@@ -24,7 +24,8 @@ export class CreateProductComponent implements OnInit {
     private _productService: ProductService,
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private router: Router,
   ) {
     this.createProductForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -77,7 +78,6 @@ export class CreateProductComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger
     // if(!this.createProductForm.valid) {
     //   this._notificationService.info("Invalid form");
     //   return;
@@ -86,7 +86,9 @@ export class CreateProductComponent implements OnInit {
     const createProductForm = this.createProductForm.value;
     this._productService.createProduct(createProductForm).subscribe({
       next: (response: any) => {
-        console.log(response);
+        this._notificationService.success(response.message);
+        this._productService.notifyProductAddedOrEdited();
+        this.router.navigate(['/admin/products']);
         
       },
       error: (errorResponse: any) => {
