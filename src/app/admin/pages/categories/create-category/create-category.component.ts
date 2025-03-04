@@ -37,7 +37,7 @@ export class CreateCategoryComponent {
         next:(response: ApiResponse<CreateCategoryDTO>) => {
           if(response && response.success) {
             this._notificationService.success(response.message);
-            this._categoryService.notifyCategoryAdded();
+            this._categoryService.notifyCategoryAddedOrEdited();
             this.router.navigate(['/admin/categories']);
           } else {
             this._notificationService.info(response.message);

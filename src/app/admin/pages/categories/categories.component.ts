@@ -26,9 +26,10 @@ export class CategoriesComponent implements OnInit {
   totalCount: number = 0;
   totalPages: number[] = [];
   currentPage: number = 1;
-  categories: any;
+  categories: any[] = [];
   categoryToDelete: any = null;
   isEditOrCreateMode: boolean = false;
+  isLoading: boolean = true;
 
   @ViewChild('categoryNameInput') categoryNameInput!: ElementRef;
   private nameChangeSubject = new Subject<string>();
@@ -36,7 +37,8 @@ export class CategoriesComponent implements OnInit {
   categoryRequest: CategoryRequest = {
     skip: 0,
     take: 10,
-    sort: SortOrder.Descending,
+    sortDirection: SortOrder.Descending,
+    sortBy: 'created',
     name: ''
   };
 
@@ -46,20 +48,14 @@ export class CategoriesComponent implements OnInit {
     private _notificationService: NotificationService,
     private router: Router
   ) {
-    this._categoryService.categoryAdded$.subscribe(status => {
-      if(status){
-        this.loadCategories();
-      }
-    })
-
-    this._categoryService.categoryEdited$.subscribe(status => {
+    this._categoryService.categoryAddedOrEdited$.subscribe(status => {
       if(status){
         this.loadCategories();
       }
     })
   }
 
-  onNameChange(): void {
+  onFilterChange(): void {
     this.nameChangeSubject.next(this.categoryRequest.name);
   }
 
@@ -70,9 +66,11 @@ export class CategoriesComponent implements OnInit {
     ).subscribe(() => {
       this.checkRoute();
     });
-  
+
+    this.isLoading = true;
     this.loadCategories();
-  
+    this.isLoading = false;
+
     this.nameChangeSubject
       .pipe(
         debounceTime(400),
@@ -94,15 +92,16 @@ export class CategoriesComponent implements OnInit {
   loadCategories() {
     this._categoryService.getCategories(this.categoryRequest).subscribe({
       next: (response: ApiResponse<CategoryDTO[]>) => {
-        if (response && response.success) {
+        if (response && response.success && response.data) {
           this.categories = response.data;
           this.totalCount = typeof response?.totalCount === 'number' ? response.totalCount : 0;
           this.calculateTotalPages();
         } else {
-          this._notificationService.info(response.message);
+          this._notificationService.error(response.message || "");
         }
       },
       error: (errorResponse: ApiResponse<CategoryDTO[]>) => {
+        debugger
         this._errorHandlerService.handleErrors(errorResponse);
       }
     });
@@ -110,7 +109,7 @@ export class CategoriesComponent implements OnInit {
 
   onItemsPerPageChange(itemsPerPage: number): void {
     this.categoryRequest.take = itemsPerPage;
-    this.categoryRequest.skip = 0;
+    this.categoryRequest.skip = 0;``
     this.currentPage = 1;
     this.loadCategories();
   }
@@ -121,10 +120,20 @@ export class CategoriesComponent implements OnInit {
     this.loadCategories();
   }
 
-  toggleSortOrder() {
-    this.categoryRequest.sort = this.categoryRequest.sort === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+  toggleSortOrder(column: string): void {
+    if (this.categoryRequest.sortBy === column) {
+      // Toggle the sort direction if the same column is clicked
+      this.categoryRequest.sortDirection = this.categoryRequest.sortDirection === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+    } else {
+      // Set the new column for sorting and default to ascending
+      this.categoryRequest.sortBy = column;
+      this.categoryRequest.sortDirection = SortOrder.Ascending;
+    }
+  
+    // Call the function to load the sorted categories from the API or backend
     this.loadCategories();
   }
+  
 
   calculateTotalPages(): void {
     const pages = Math.ceil(this.totalCount / this.categoryRequest.take);

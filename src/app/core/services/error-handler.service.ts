@@ -20,7 +20,7 @@ export class ErrorHandlerService {
         }
       }
     } else if (errorResponse?.error?.message) {
-      this._notificationService.info(errorResponse.error.message);
+      this._notificationService.error(errorResponse.error.message);
     } else {
       this._notificationService.error('An unexpected error occurred.');
     }

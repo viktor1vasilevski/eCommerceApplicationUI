@@ -72,7 +72,7 @@ export class EditCategoryComponent implements OnInit {
     this._categoryService.editCategory(this.selectedCategoryId, editCategooryForm).subscribe({
       next:(response: any) => {
         if(response && response.success) {
-          this._categoryService.notifyCategoryEdited();
+          this._categoryService.notifyCategoryAddedOrEdited();
           this._notificationService.success(response.message);
           this.router.navigate(['/admin/categories']);
         } else {

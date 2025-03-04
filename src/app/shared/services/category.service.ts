@@ -20,11 +20,8 @@ export class CategoryService {
 
   private baseUrl = environment.apiUrl;
 
-  private categoryAddedSource = new BehaviorSubject<boolean>(false);
-  categoryAdded$ = this.categoryAddedSource.asObservable();
-
-  private categoryEditedSource = new BehaviorSubject<boolean>(false);
-  categoryEdited$ = this.categoryEditedSource.asObservable();
+  private categoryAddedOrEditedSource = new BehaviorSubject<boolean>(false);
+  categoryAddedOrEdited$ = this.categoryAddedOrEditedSource.asObservable();
 
   constructor(private _dataApiService: DataService) {}
 
@@ -32,7 +29,8 @@ export class CategoryService {
     const params = new HttpParams()
       .set('skip', request.skip.toString())
       .set('take', request.take.toString())
-      .set('sort', request.sort)
+      .set('sortDirection', request.sortDirection)
+      .set('sortBy', request.sortBy)
       .set('name', request.name);
 
     const url = `${this.baseUrl}/category/get`;
@@ -63,13 +61,7 @@ export class CategoryService {
   }
 
 
-
-
-  notifyCategoryAdded() {
-    this.categoryAddedSource.next(true);
-  }
-
-  notifyCategoryEdited() {
-    this.categoryEditedSource.next(true);
+  notifyCategoryAddedOrEdited() {
+    this.categoryAddedOrEditedSource.next(true);
   }
 }
