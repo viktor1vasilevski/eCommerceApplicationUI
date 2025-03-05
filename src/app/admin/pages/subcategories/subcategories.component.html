@@ -7,6 +7,13 @@
                     <h4 class="mb-0">Subcategories List</h4>
                 </div>
                 <div class="card-body">
+
+                    <div class="alert alert-info text-center" role="alert">
+                        All inputs are created and modified by the admin.<br><br>
+                        <span class="font-weight-bold">Note:</span> The "UNCATEGORIZED" subcategory is designated for
+                        products that the admin is currently uncertain about categorizing. As such, it is neither
+                        editable nor deletable.
+                    </div>
                     <!-- Create Subcategory Button -->
                     <div class="d-flex justify-content-end mb-3">
                         <a (click)="loadCreateSubcategoryPage()" class="btn btn-success">
@@ -21,15 +28,26 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Category</th>
-                                    <th *ngIf="subcategories.length !== 0" (click)="toggleSortOrder()"
-                                        style="cursor: pointer;">
+                                    <th style="min-width: 150px;"
+                                        [ngClass]="{ 'cursor-pointer': subcategories.length !== 0 }"
+                                        (click)="subcategories.length !== 0 && toggleSortOrder('created')">
                                         Created
-                                        <i *ngIf="subcategories.length !== 0"
-                                            [ngClass]="subcategoryRequest.sort === 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'"></i>
+                                        <!-- Sorting arrows based on the sort state for the "Created" column -->
+                                        <i *ngIf="subcategoryRequest.sortBy === 'created'"
+                                            [ngClass]="subcategoryRequest.sortDirection === 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'"></i>
+                                        <i *ngIf="subcategoryRequest.sortBy !== 'created'" class="fa fa-arrow-up"></i>
                                     </th>
-                                    <th>Created By</th>
-                                    <th>Last Modified</th>
-                                    <th>Last Modified By</th>
+
+                                    <th style="min-width: 150px;"
+                                        [ngClass]="{ 'cursor-pointer': subcategories.length !== 0 }"
+                                        (click)="subcategories.length !== 0 && toggleSortOrder('lastmodified')">
+                                        Modified
+                                        <!-- Sorting arrows based on the sort state for the "Modified" column -->
+                                        <i *ngIf="subcategoryRequest.sortBy === 'lastmodified'"
+                                            [ngClass]="subcategoryRequest.sortDirection === 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'"></i>
+                                        <i *ngIf="subcategoryRequest.sortBy !== 'lastmodified'"
+                                            class="fa fa-arrow-up"></i>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>
@@ -59,11 +77,9 @@
                                     <td>{{ subcategory.name }}</td>
                                     <td>{{ subcategory.category }}</td>
                                     <td>{{ subcategory.created | date:'dd/MM/yyyy HH:mm' }}</td>
-                                    <td>{{ subcategory.createdBy }}</td>
                                     <td>{{ subcategory.lastModified ? (subcategory.lastModified |
                                         date:'dd/MM/yyyyHH:mm') :
                                         '/' }}</td>
-                                    <td>{{ subcategory.lastModifiedBy ? subcategory.lastModifiedBy : '/' }}</td>
                                     <td class="text-end">
                                         <div class="dropdown" *ngIf="subcategory.name !== 'UNCATEGORIZED'">
                                             <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"

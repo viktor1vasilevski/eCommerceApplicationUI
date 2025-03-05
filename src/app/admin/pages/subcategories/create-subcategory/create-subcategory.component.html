@@ -3,6 +3,11 @@
         <h4 class="mb-0">Create Subcategory</h4>
     </div>
     <div class="card-body">
+
+        <div class="alert alert-info text-center" role="alert">
+            <span class="font-weight-bold">Note:</span> The "UNCATEGORIZED" category is intended for subcategories
+            that are either not yet assigned or uncertain about their appropriate classification.
+        </div>
         <form [formGroup]="createSubcategoryForm" (ngSubmit)="onSubmit()">
             <div class="form-group mb-3">
                 <label for="name" class="form-label fw-semibold">Name</label>

@@ -33,7 +33,7 @@ export class SubcategoriesComponent implements OnInit {
   currentPage: number = 1;
   subcategoryToDelete: any;
 
-  categories: any;
+  categories: any[] = [];
   categoryDropdown: SelectCategoryListItemDTO[] | null = [];
 
   @ViewChild('subcategoryNameInput') categoryNameInput!: ElementRef;
@@ -42,7 +42,8 @@ export class SubcategoriesComponent implements OnInit {
   subcategoryRequest: SubcategoryRequest = {
     skip: 0,
     take: 10,
-    sort: SortOrder.Descending,
+    sortDirection: SortOrder.Descending,
+    sortBy: 'created',
     name: '',
     categoryId: ''
   };
@@ -139,8 +140,18 @@ export class SubcategoriesComponent implements OnInit {
     this.router.navigate(['/admin/subcategories/create'])
   }
 
-  toggleSortOrder() {
-    this.subcategoryRequest.sort = this.subcategoryRequest.sort === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+  toggleSortOrder(column: string): void {
+    debugger
+    if (this.subcategoryRequest.sortBy === column) {
+      // Toggle the sort direction if the same column is clicked
+      this.subcategoryRequest.sortDirection = this.subcategoryRequest.sortDirection === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+    } else {
+      // Set the new column for sorting and default to ascending
+      this.subcategoryRequest.sortBy = column;
+      this.subcategoryRequest.sortDirection = SortOrder.Ascending;
+    }
+  
+    // Call the function to load the sorted categories from the API or backend
     this.loadSubcategories();
   }
 

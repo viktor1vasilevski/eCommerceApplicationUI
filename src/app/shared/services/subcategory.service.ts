@@ -27,7 +27,8 @@ export class SubcategoryService {
       .set('categoryId', request.categoryId)
       .set('skip', request.skip.toString())
       .set('take', request.take.toString())
-      .set('sort', request.sort);
+      .set('sortDirection', request.sortDirection)
+      .set('sortBy', request.sortBy);
 
     const url = `${this.baseUrl}/subcategory/get`;
     return this._dataApiService.getAll<any>(url, params);
