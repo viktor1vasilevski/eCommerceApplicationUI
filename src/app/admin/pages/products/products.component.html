@@ -7,6 +7,10 @@
                     <h4 class="mb-0">Filters</h4>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-info text-center" role="alert">
+                        <span class="font-weight-bold">Note: </span>Subcategories under the "UNCATEGORIZED" category are
+                        excluded from the dropdown list.
+                    </div>
                     <div class="row g-2">
                         <!-- Name Filter -->
                         <div class="col-md-3">
@@ -94,10 +98,14 @@
             <hr />
             <!-- Product List -->
             <div class="card shadow-sm">
+
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">Products List</h4>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-info text-center" role="alert">
+                        <span class="font-weight-bold">Note:</span> All inputs are created and modified by the admin.
+                    </div>
                     <!-- Create Subcategory Button -->
                     <div class="d-flex justify-content-end mb-3">
                         <a (click)="loadCreateProductPage()" class="btn btn-success">
