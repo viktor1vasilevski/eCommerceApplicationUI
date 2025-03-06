@@ -158,10 +158,12 @@ export class CategoriesComponent implements OnInit {
             this.closeModal();
             this.loadCategories();
           } else {
+            this.closeModal();
             this._notificationService.info(response.message);
           }
         },
-        error: (errorResponse: NonGenericApiResponse) => {
+        error: (errorResponse: NonGenericApiResponse) => {+
+          this.closeModal();
           this._errorHandlerService.handleErrors(errorResponse);
         }
       });

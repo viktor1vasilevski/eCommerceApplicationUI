@@ -9,6 +9,9 @@ import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { CategoryService } from '../../../shared/services/category.service';
 import { SubcategoryService } from '../../../shared/services/subcategory.service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-products',
@@ -29,6 +32,7 @@ export class ProductsComponent implements OnInit {
   subcategoryToDelete: any;
   categoriesDrowdown: any[] = [];
   subcategoriesDrowdown: any[] = [];
+  productToDelete: any = null;
 
   private filterChangeSubject = new Subject<string>();
 
@@ -59,6 +63,8 @@ export class ProductsComponent implements OnInit {
     private _productService: ProductService,
     private _categoryService: CategoryService,
     private _subcategoryService: SubcategoryService,
+    private _notificationService: NotificationService,
+    private _errorHandlerService: ErrorHandlerService
   ) {
     this._productService.productAddedOrEdited$.subscribe(status => {
       if(status){
@@ -167,8 +173,13 @@ export class ProductsComponent implements OnInit {
 
   }
 
-  prepareForDelete(el: any) {
-
+  prepareForDelete(product: any): void {
+    this.productToDelete = product;
+    const modal = document.getElementById('deleteConfirmationModal');
+    if (modal) {
+      const bootstrapModal = new bootstrap.Modal(modal);
+      bootstrapModal.show();
+    }
   }
 
   changePage(page: any) {
@@ -184,15 +195,35 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
+  deleteProduct() {
+    debugger
+    if (this.productToDelete) {
+      this._productService.deleteProduct(this.productToDelete.id).subscribe({
+        next: (response: any) => {
+          if (response && response.success) {
+            this._notificationService.success(response.message);
+            this.closeModal();
+            this.loadProducts();
+          } else {
+            this.closeModal();
+            this._notificationService.info(response.message);
+          }
+        },
+        error: (errorResponse: any) => {+
+          this.closeModal();
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      });
+    }
+  }
+
 
 
   onDeactivate() {
     this.isEditOrCreateMode = false;
   }
 
-  deleteProduct() {
 
-  }
 
   calculateTotalPages(): void {
     const pages = Math.ceil(this.totalCount / this.productRequest.take);
@@ -212,5 +243,14 @@ export class ProductsComponent implements OnInit {
     }
   }
   
-  
+  closeModal(): void {
+    const deleteModalElement = document.getElementById('deleteConfirmationModal');
+    if (deleteModalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(deleteModalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    this.productToDelete = null;
+  }
 }

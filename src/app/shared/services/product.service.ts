@@ -39,6 +39,10 @@ export class ProductService {
     return this._dataApiService.create<any, any>(`${this.baseUrl}/product/create`, request);
   }
 
+  deleteProduct(id: string): Observable<any> {
+    const url = `${this.baseUrl}/product/delete/${id}`;
+    return this._dataApiService.delete<any>(url);
+  }
 
   notifyProductAddedOrEdited() {
     this.productAddedOrEditedSource.next(true);
