@@ -12,7 +12,7 @@
             <div class="form-group mb-3">
                 <label for="name" class="form-label fw-semibold">Name</label>
                 <input type="text" id="name" class="form-control rounded-3" formControlName="name"
-                    placeholder="Create subcategory name" #categoryNameInput />
+                    placeholder="Create subcategory name" autocomplete="off" />
                 <div *ngIf="createSubcategoryForm.get('name')?.invalid && createSubcategoryForm.get('name')?.touched"
                     class="text-danger mt-1">
                     <small *ngIf="createSubcategoryForm.get('name')?.errors?.['required']">Subcategory

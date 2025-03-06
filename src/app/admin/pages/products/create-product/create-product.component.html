@@ -3,6 +3,12 @@
         <h4 class="mb-0">Create Product</h4>
     </div>
     <div class="card-body">
+        <div class="alert alert-info text-center" role="alert">
+            All inputs are created and modified by the admin.<br><br>
+            <span class="font-weight-bold">Note:</span> The "UNCATEGORIZED" subcategory is designated for
+            products that the admin is currently uncertain about categorizing. As such, it is neither
+            editable nor deletable.
+        </div>
         <form [formGroup]="createProductForm" (ngSubmit)="onSubmit()">
 
             <div class="row">
