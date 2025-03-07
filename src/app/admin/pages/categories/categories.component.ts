@@ -101,7 +101,6 @@ export class CategoriesComponent implements OnInit {
         }
       },
       error: (errorResponse: ApiResponse<CategoryDTO[]>) => {
-        debugger
         this._errorHandlerService.handleErrors(errorResponse);
       }
     });

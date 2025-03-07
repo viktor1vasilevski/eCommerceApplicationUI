@@ -197,7 +197,6 @@ export class ProductsComponent implements OnInit {
   }
 
   deleteProduct() {
-    debugger
     if (this.productToDelete) {
       this._productService.deleteProduct(this.productToDelete.id).subscribe({
         next: (response: any) => {
@@ -233,7 +232,6 @@ export class ProductsComponent implements OnInit {
 
 
   applyFilters(event: Event, sortBy: string) {
-    debugger
     const selectElement = event.target as HTMLSelectElement;
     const sortDirection = selectElement.value;
   

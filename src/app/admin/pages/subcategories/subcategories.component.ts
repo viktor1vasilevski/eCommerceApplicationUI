@@ -141,7 +141,7 @@ export class SubcategoriesComponent implements OnInit {
   }
 
   toggleSortOrder(column: string): void {
-    debugger
+
     if (this.subcategoryRequest.sortBy === column) {
       // Toggle the sort direction if the same column is clicked
       this.subcategoryRequest.sortDirection = this.subcategoryRequest.sortDirection === SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;

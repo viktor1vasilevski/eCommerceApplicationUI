@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../../../shared/services/product.service';
@@ -40,14 +40,74 @@ export class EditProductComponent implements OnInit {
       image: [ '' , [Validators.required]],
       subcategoryId: ['', [Validators.required]],
     });
+
+    this.route.params.subscribe(params => {
+      this.selectedProductId = params['id'];
+    })
   }
 
   ngOnInit(): void {
     this.loadCategoriesDropdownList();
-    this.route.params.subscribe(params => {
-      this.selectedProductId = params['id'];
-      console.log(this.selectedProductId);
-      
+    this.loadProductById();
+
+  }
+
+  loadProductById() {
+    this._productService.getProductById(this.selectedProductId).subscribe({
+      next: (response: any) => {
+        if(response && response.success && response.data) {
+          this.imagePreviewUrl = response.data?.imageBase64; 
+          debugger
+
+          // onFileSelected(event: Event): void {
+          //   const input = event.target as HTMLInputElement;
+          //   if (input.files && input.files.length > 0) {
+          //     const file = input.files[0];
+          //     const reader = new FileReader();
+          //     reader.onload = () => {
+          //       const base64String = reader.result as string;
+          //       this.imagePreviewUrl = base64String;
+          //       this.createProductForm.patchValue({ image: base64String });
+          //     };
+        
+          //     reader.readAsDataURL(file); 
+          //   }
+          // }
+
+          let input = document.getElementById('image') as HTMLInputElement;
+          debugger
+            if (input.files && input.files.length > 0) {
+              const file = input.files[0];
+              const reader = new FileReader();
+              reader.onload = () => {
+                const base64String = reader.result as string;
+                this.imagePreviewUrl = base64String;
+                //this.createProductForm.patchValue({ image: base64String });
+              };
+        
+              reader.readAsDataURL(file); 
+            }
+
+
+
+
+          this.editProductForm.patchValue({
+            name: response.data?.name,
+            subcategoryId: response.data?.subcategoryId,
+            scent: response.data?.scent,
+            brand: response.data?.brand,
+            unitPrice: response.data?.unitPrice,
+            unitQuantity: response.data?.unitQuantity,
+            volume: response.data?.volume,
+            edition: response.data?.edition,
+            description: response.data?.description,
+            image: response.data?.imageBase64
+          })
+        }
+      },
+      error: (errorResponse: any) => {
+        this._errorHandlerService.handleErrors(errorResponse);
+      }
     })
   }
 
@@ -68,7 +128,36 @@ export class EditProductComponent implements OnInit {
 
 
   onSubmit() {
+    if(!this.editProductForm.valid) {
+      this._notificationService.info('Invalid form');
+      return;
+    }
 
+    const editProductForm = this.editProductForm.value;
+    var input = document.getElementById('image') as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        this.imagePreviewUrl = base64String;
+        this.editProductForm.patchValue({ image: base64String });
+      };
+
+      reader.readAsDataURL(file); 
+    }
+
+    this._productService.editProduct(this.selectedProductId, editProductForm).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        
+      },
+      error: (errorResponse: any) => {
+        console.log(errorResponse);
+        
+      }
+    })
   }
 
   onFileSelected(event: Event): void {

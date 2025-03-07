@@ -63,7 +63,6 @@ export class LoginComponent {
         }
   
         const { token, role, username, email } = data;
-        debugger
   
         this._authManagerService.setSession(email, token, role, username);
         this._authManagerService.setLoggedInState(true, role);

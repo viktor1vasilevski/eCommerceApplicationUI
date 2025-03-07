@@ -39,9 +39,18 @@ export class ProductService {
     return this._dataApiService.create<any, any>(`${this.baseUrl}/product/create`, request);
   }
 
+  editProduct(id: string, request: any): Observable<any> {
+    return this._dataApiService.put<any, any>(`${this.baseUrl}/product/edit/${id}`, request);
+  }
+
   deleteProduct(id: string): Observable<any> {
     const url = `${this.baseUrl}/product/delete/${id}`;
     return this._dataApiService.delete<any>(url);
+  }
+
+  getProductById(id: string): Observable<any> {
+    const url = `${this.baseUrl}/product/get/${id}`;
+    return this._dataApiService.getById<any>(url);
   }
 
   notifyProductAddedOrEdited() {

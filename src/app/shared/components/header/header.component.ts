@@ -22,16 +22,13 @@ export class HeaderComponent {
     private router: Router
   ) {
     this._authManagerService.role$.subscribe(role => {
-      debugger
       this.role = role;
     }),
     this._authManagerService.email$.subscribe(mail => {
-      debugger
       this.email = mail;
     }),
 
     this._authManagerService.username$.subscribe(username => {
-      debugger
       this.username = username;
     }),
 
