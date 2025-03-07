@@ -169,8 +169,9 @@ export class ProductsComponent implements OnInit {
     this.filterChangeSubject.next(JSON.stringify(this.productRequest));
   }
 
-  loadEditProductPage(id: any) {
-
+  loadEditProductPage(productId: any) {
+    this.isEditOrCreateMode = true;
+    this.router.navigate([`/admin/products/edit/${productId}`]);
   }
 
   prepareForDelete(product: any): void {
