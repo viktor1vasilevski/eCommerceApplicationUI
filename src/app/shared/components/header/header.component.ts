@@ -14,13 +14,27 @@ export class HeaderComponent {
 
   role: string | null = "";
   isLogged: boolean = false;
+  username: string | null = '';
+  email: string | null = ""
+
 
   constructor(private _authManagerService: AuthManagerService,
     private router: Router
   ) {
     this._authManagerService.role$.subscribe(role => {
+      debugger
       this.role = role;
     }),
+    this._authManagerService.email$.subscribe(mail => {
+      debugger
+      this.email = mail;
+    }),
+
+    this._authManagerService.username$.subscribe(username => {
+      debugger
+      this.username = username;
+    }),
+
 
     this._authManagerService.loggedIn$.subscribe(isLogged => {
       this.isLogged = isLogged;

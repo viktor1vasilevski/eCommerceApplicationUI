@@ -52,10 +52,16 @@
                         <button class="btn btn-outline-primary me-2" type="button" routerLink="/login">Login</button>
                         <button class="btn btn-primary" type="button" routerLink="/register">Register</button>
                     </div>
-                    <div *ngIf="isLogged">
+                    <div *ngIf="isLogged" class="d-flex align-items-center">
+                        <!-- User Info -->
+                        <div class="me-3 text-end">
+                            <div class="fw-semibold">{{ username }}</div>
+                            <div class="small text-muted">{{ email }}</div>
+                        </div>
                         <button class="btn btn-danger" type="button" (click)="onLogout()">Logout</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </nav>

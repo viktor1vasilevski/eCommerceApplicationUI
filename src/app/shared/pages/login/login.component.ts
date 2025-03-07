@@ -62,10 +62,12 @@ export class LoginComponent {
           return;
         }
   
-        const { token, role, username } = data;
+        const { token, role, username, email } = data;
+        debugger
   
-        this._authManagerService.setSession(token, role, username);
+        this._authManagerService.setSession(email, token, role, username);
         this._authManagerService.setLoggedInState(true, role);
+        this._authManagerService.setUsernameAndEmail(username, email);
         this._notificationService.success(message);
         this.loginForm.reset();
   
