@@ -63,6 +63,7 @@ export class CreateProductComponent implements OnInit {
 
 
   onFileSelected(event: Event): void {
+    debugger
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -78,10 +79,10 @@ export class CreateProductComponent implements OnInit {
   }
 
   onSubmit() {
-    // if(!this.createProductForm.valid) {
-    //   this._notificationService.info("Invalid form");
-    //   return;
-    // }
+    if(!this.createProductForm.valid) {
+      this._notificationService.info("Invalid form");
+      return;
+    }
 
     const createProductForm = this.createProductForm.value;
     this._productService.createProduct(createProductForm).subscribe({
@@ -92,7 +93,7 @@ export class CreateProductComponent implements OnInit {
         
       },
       error: (errorResponse: any) => {
-        console.log(errorResponse);
+        this._errorHandlerService.handleErrors(errorResponse);
       }
     });
   }

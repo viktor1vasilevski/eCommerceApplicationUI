@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../../shared/services/product.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
@@ -26,7 +26,8 @@ export class EditProductComponent implements OnInit {
     private _productService: ProductService,
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private router: Router
   ) {
     this.editProductForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -56,41 +57,7 @@ export class EditProductComponent implements OnInit {
     this._productService.getProductById(this.selectedProductId).subscribe({
       next: (response: any) => {
         if(response && response.success && response.data) {
-          this.imagePreviewUrl = response.data?.imageBase64; 
-          debugger
-
-          // onFileSelected(event: Event): void {
-          //   const input = event.target as HTMLInputElement;
-          //   if (input.files && input.files.length > 0) {
-          //     const file = input.files[0];
-          //     const reader = new FileReader();
-          //     reader.onload = () => {
-          //       const base64String = reader.result as string;
-          //       this.imagePreviewUrl = base64String;
-          //       this.createProductForm.patchValue({ image: base64String });
-          //     };
-        
-          //     reader.readAsDataURL(file); 
-          //   }
-          // }
-
-          let input = document.getElementById('image') as HTMLInputElement;
-          debugger
-            if (input.files && input.files.length > 0) {
-              const file = input.files[0];
-              const reader = new FileReader();
-              reader.onload = () => {
-                const base64String = reader.result as string;
-                this.imagePreviewUrl = base64String;
-                //this.createProductForm.patchValue({ image: base64String });
-              };
-        
-              reader.readAsDataURL(file); 
-            }
-
-
-
-
+          
           this.editProductForm.patchValue({
             name: response.data?.name,
             subcategoryId: response.data?.subcategoryId,
@@ -103,6 +70,8 @@ export class EditProductComponent implements OnInit {
             description: response.data?.description,
             image: response.data?.imageBase64
           })
+
+          this.imagePreviewUrl = response.data?.imageBase64; 
         }
       },
       error: (errorResponse: any) => {
@@ -134,27 +103,20 @@ export class EditProductComponent implements OnInit {
     }
 
     const editProductForm = this.editProductForm.value;
-    var input = document.getElementById('image') as HTMLInputElement;
-
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        this.imagePreviewUrl = base64String;
-        this.editProductForm.patchValue({ image: base64String });
-      };
-
-      reader.readAsDataURL(file); 
-    }
-
     this._productService.editProduct(this.selectedProductId, editProductForm).subscribe({
       next: (response: any) => {
-        console.log(response);
+        debugger
+        if(response && response.success) {
+          this._notificationService.success(response.message);
+          this._productService.notifyProductAddedOrEdited();
+          this.router.navigate(['/admin/products']);
+        } else {
+          this._notificationService.error(response.message)
+        }
         
       },
       error: (errorResponse: any) => {
-        console.log(errorResponse);
+        this._errorHandlerService.handleErrors(errorResponse);
         
       }
     })

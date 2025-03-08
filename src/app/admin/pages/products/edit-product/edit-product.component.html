@@ -153,10 +153,13 @@
 
             <div class="form-group mb-3">
                 <label for="image">Image</label>
-                <input type="file" id="image" (change)="onFileSelected($event)" class="form-control" />
-                <!-- <div *ngIf="image?.invalid && image?.touched" class="text-danger">
-                    <small *ngIf="image?.errors?.['required']">Image is required.</small>
-                </div> -->
+                <input type="file" id="image" (change)="onFileSelected($event)" class="form-control"
+                    innerHTML="asdasd" />
+                <div *ngIf="editProductForm.get('image')?.invalid && editProductForm.get('image')?.touched"
+                    class="text-danger mt-1">
+                    <small *ngIf="editProductForm.get('image')?.errors?.['required']">Image is
+                        required.</small>
+                </div>
                 <div *ngIf="imagePreviewUrl">
                     <img [src]="imagePreviewUrl" alt="Image Preview" class="img-fluid mt-2" />
                 </div>
