@@ -17,6 +17,36 @@
                     <li *ngIf="role !== 'Admin'" class="nav-item">
                         <a class="nav-link active fw-semibold" aria-current="page" routerLink="/home">Home</a>
                     </li>
+                    <li *ngIf="role !== 'Admin'" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="productsDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Products
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                            <ng-container *ngFor="let category of categories">
+                                <li class="dropdown-submenu">
+                                    <!-- Category item with a static right-facing arrow -->
+                                    <a class="dropdown-item" href="#">
+                                        {{ category.name }}
+                                        <span *ngIf="category.subcategories && category.subcategories.length > 0"
+                                            class="arrow">
+                                            <i class="fas fa-chevron-right"></i> <!-- Static right-facing arrow -->
+                                        </span>
+                                    </a>
+
+                                    <!-- Subcategories shown on hover -->
+                                    <ul class="dropdown-menu">
+                                        <li *ngFor="let subcategory of category.subcategories">
+                                            <a class="dropdown-item" [routerLink]="['/customer/products']"
+                                                [queryParams]="{ categoryId: category.id, subcategoryId: subcategory.id }">
+                                                {{ subcategory.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </li>
 
                     <!-- Admin Menu -->
                     <div *ngIf="role === 'Admin'">

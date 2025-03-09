@@ -60,6 +60,11 @@ export class CategoryService {
     return this._dataApiService.getAll<ApiResponse<SelectCategoryListItemDTO[]>>(url);
   }
 
+  getCategoriesWithSubcategories(): Observable<any> {
+    const url = `${this.baseUrl}/category/getCategoriesWithSubcategories`;
+    return this._dataApiService.getAll<any>(url);
+  }
+
 
   notifyCategoryAddedOrEdited() {
     this.categoryAddedOrEditedSource.next(true);

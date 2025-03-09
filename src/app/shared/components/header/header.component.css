@@ -1,0 +1,18 @@
+
+.arrow {
+    margin-left: 5px;
+    font-size: 12px;
+    color: #888;
+}
+
+  .dropdown-submenu .dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+  }
+  
+  .dropdown-submenu:hover .dropdown-menu {
+    display: block;
+  }
+  
