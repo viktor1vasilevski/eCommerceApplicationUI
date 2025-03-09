@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../shared/services/product.service';
 import { ProductRequest } from '../../../shared/models/product/product-request';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -10,9 +11,12 @@ import { ProductRequest } from '../../../shared/models/product/product-request';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy  {
+
+  
   categoryId: string | null = null;
   subcategoryId: string | null = null;
+  private routeSub: Subscription | undefined; 
 
   productRequest: ProductRequest = {
     name: '',
@@ -31,26 +35,37 @@ export class ProductsComponent implements OnInit {
     sortBy: 'created'
   };
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
     private _productService: ProductService
   ) {}
 
+
+
+  ngOnDestroy(): void {
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
+    debugger
     // Get the query parameters from the URL
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.productRequest.categoryId = params['categoryId'];
-      this.productRequest.subcategoryId = params['subcategoryId'];
+    this.routeSub = this.route.queryParams.subscribe(params => {
+      this.categoryId = params['categoryId'];
+      this.subcategoryId = params['subcategoryId'];
+
+      this._productService.getProducts(this.productRequest).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          
+        },
+        error: (errorResponse: any) => {
+  
+        }
+      })
     });
 
-    this._productService.getProducts(this.productRequest).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        
-      },
-      error: (errorResponse: any) => {
 
-      }
-    })
 
 
   }

@@ -17,6 +17,9 @@
                     <li *ngIf="role !== 'Admin'" class="nav-item">
                         <a class="nav-link active fw-semibold" aria-current="page" routerLink="/home">Home</a>
                     </li>
+
+
+
                     <li *ngIf="role !== 'Admin'" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="productsDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -24,7 +27,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="productsDropdown">
                             <ng-container *ngFor="let category of categories">
-                                <li class="dropdown-submenu">
+                                <li class="dropdown-submenu position-relative">
                                     <!-- Category item with a static right-facing arrow -->
                                     <a class="dropdown-item" href="#">
                                         {{ category.name }}
@@ -35,7 +38,7 @@
                                     </a>
 
                                     <!-- Subcategories shown on hover -->
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu position-absolute start-100 top-0">
                                         <li *ngFor="let subcategory of category.subcategories">
                                             <a class="dropdown-item" [routerLink]="['/customer/products']"
                                                 [queryParams]="{ categoryId: category.id, subcategoryId: subcategory.id }">
@@ -47,6 +50,7 @@
                             </ng-container>
                         </ul>
                     </li>
+
 
                     <!-- Admin Menu -->
                     <div *ngIf="role === 'Admin'">
