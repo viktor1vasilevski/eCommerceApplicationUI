@@ -1,1 +1,22 @@
-<p>products works!</p>
+<div class="container mt-4 px-3">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="col" *ngFor="let product of products">
+            <div class="card h-100 shadow-lg border-0 rounded-3 custom-card">
+                <img [src]="product.imageBase64" class="card-img-top product-image" alt="{{ product.name }}">
+
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                    <p class="card-text"><strong>Brand:</strong> {{ product.brand }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ product.unitPrice | currency }}</p>
+                    <p class="card-text"><strong>Volume:</strong> {{ product.volume }} ml</p>
+                    <p class="card-text"><strong>Scent:</strong> {{ product.scent || 'N/A' }}</p>
+                    <p class="card-text"><strong>Description:</strong> {{ product.description || 'N/A' }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between custom-footer">
+                    <button class="btn btn-primary btn-sm">View</button>
+                    <!-- <button class="btn btn-outline-secondary btn-sm">Edit</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

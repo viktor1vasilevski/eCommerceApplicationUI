@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { UnauthorizedComponent } from './shared/pages/unauthorized/unauthorized.component';
+import { customerGuard } from './core/guards/customer.guard';
 
 export const routes: Routes = [
   {
@@ -13,8 +14,7 @@ export const routes: Routes = [
   {
     path: 'customer',
     loadChildren: () => import('./customer/customer.routes').then((m) => m.customerRoutes), 
-    canActivate: [authGuard],
-    data: { roles: ['Customer'] }
+    canActivate: [ customerGuard ]
   },
   { 
     path: 'login', 

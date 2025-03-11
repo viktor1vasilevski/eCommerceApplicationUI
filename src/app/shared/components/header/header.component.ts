@@ -6,6 +6,8 @@ import { SubcategoryService } from '../../services/subcategory.service';
 import { CategoryService } from '../../services/category.service';
 import { CategoryRequest } from '../../models/category/category-request';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +36,9 @@ export class HeaderComponent implements OnInit {
   constructor(private _authManagerService: AuthManagerService,
     private router: Router,
     private _subcategoryService: SubcategoryService,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _notificationService: NotificationService,
+    private _errorHandlerService: ErrorHandlerService
   ) {
     this._authManagerService.role$.subscribe(role => {
       this.role = role;
@@ -55,17 +59,17 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
+    debugger
     this._categoryService.getCategoriesWithSubcategories().subscribe({
       next: (response: any) => {
         if (response && response.success && response.data) {
           this.categories = response.data;
-  
-          // Add the isSubmenuVisible flag to each category
-
+        } else {
+          this._notificationService.error(response.message);
         }
       },
       error: (errorResponse: any) => {
-        // Handle error response if needed
+        this._errorHandlerService.handleErrors(errorResponse);
       }
     });
   }
