@@ -11,6 +11,7 @@ import { SubcategoryService } from '../../../shared/services/subcategory.service
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { NavbarService } from '../../services/navbar.service';
 declare var bootstrap: any;
 
 @Component({
@@ -64,7 +65,8 @@ export class ProductsComponent implements OnInit {
     private _categoryService: CategoryService,
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private _navbarService: NavbarService
   ) {
     this._productService.productAddedOrEdited$.subscribe(status => {
       if(status){
@@ -77,9 +79,9 @@ export class ProductsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.loadProducts();
     this.loadCategoriesDropdownList();
     this.loadSubcategoriesDropdownList();
+    this.loadProducts();
 
     this.filterChangeSubject.pipe(
       debounceTime(400),
@@ -202,6 +204,7 @@ export class ProductsComponent implements OnInit {
         next: (response: any) => {
           if (response && response.success) {
             this._notificationService.success(response.message);
+            this._navbarService.updateNavbarTree();
             this.closeModal();
             this.loadProducts();
           } else {

@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { SelectCategoryListItemDTO } from '../../models/category/select-category-list-item-dto';
 import { ApiResponse } from '../../../core/models/responses/api-response';
 import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
+import { NavbarService } from '../../services/navbar.service';
 declare var bootstrap: any;
 
 @Component({
@@ -52,7 +53,8 @@ export class SubcategoriesComponent implements OnInit {
     private _subcategoryService: SubcategoryService,
     private _errorHandlerService: ErrorHandlerService,
     private _notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private _navbarService: NavbarService
   ) {
     this._subcategoryService.subcategoryAdded$.subscribe(status => {
       if(status){
@@ -201,6 +203,7 @@ export class SubcategoriesComponent implements OnInit {
             this._notificationService.success(response.message);
             this.closeModal();
             this.loadSubcategories();
+            this._navbarService.updateNavbarTree();
           } else {
             this._notificationService.info(response.message);
             this.closeModal();

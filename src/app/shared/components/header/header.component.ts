@@ -8,6 +8,7 @@ import { CategoryRequest } from '../../models/category/category-request';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { NavbarService } from '../../../admin/services/navbar.service';
 
 @Component({
   selector: 'app-header',
@@ -35,7 +36,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private _authManagerService: AuthManagerService,
     private router: Router,
-    private _subcategoryService: SubcategoryService,
+    private _navbarService: NavbarService,
     private _categoryService: CategoryService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService
@@ -54,12 +55,22 @@ export class HeaderComponent implements OnInit {
 
     this._authManagerService.loggedIn$.subscribe(isLogged => {
       this.isLogged = isLogged;
-    })
+    }),
+
+    this._navbarService.isNavbarUpdated$.subscribe(status => {
+      if(status) {
+        this.loadCategoriesWithSubcategories();
+      }
+    })  
   }
 
 
   ngOnInit(): void {
-    debugger
+    this.loadCategoriesWithSubcategories();
+
+  }
+
+  loadCategoriesWithSubcategories() {
     this._categoryService.getCategoriesWithSubcategories().subscribe({
       next: (response: any) => {
         if (response && response.success && response.data) {

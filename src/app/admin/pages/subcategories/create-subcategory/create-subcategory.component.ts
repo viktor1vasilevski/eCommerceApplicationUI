@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CategoryService } from '../../../../shared/services/category.service';
 import { CommonModule } from '@angular/common';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-create-subcategory',
@@ -24,7 +25,8 @@ export class CreateSubcategoryComponent implements OnInit {
     private _errorHandlerService: ErrorHandlerService,
     private router: Router,
     private _categoryService: CategoryService,
-    private _subcategoryService: SubcategoryService
+    private _subcategoryService: SubcategoryService,
+    private _navbarService: NavbarService
   ) {
     this.createSubcategoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -60,6 +62,7 @@ export class CreateSubcategoryComponent implements OnInit {
           if(response && response.success) {
             this._notificationService.success(response.message);
             this._subcategoryService.notifySubcategoryAdded();
+            this._navbarService.updateNavbarTree();
             this.router.navigate(['/admin/subcategories']);
           } else {
             this._notificationService.info(response.message);

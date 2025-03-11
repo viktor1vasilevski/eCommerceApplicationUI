@@ -7,6 +7,7 @@ import { ErrorHandlerService } from '../../../../core/services/error-handler.ser
 import { CategoryService } from '../../../../shared/services/category.service';
 import { ApiResponse } from '../../../../core/models/responses/api-response';
 import { CreateCategoryDTO } from '../../../models/category/create-category-dto';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-create-category',
@@ -23,7 +24,8 @@ export class CreateCategoryComponent {
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
     private router: Router,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _navbarService: NavbarService
   ) {
     this.createCategoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -38,6 +40,7 @@ export class CreateCategoryComponent {
           if(response && response.success) {
             this._notificationService.success(response.message);
             this._categoryService.notifyCategoryAddedOrEdited();
+            this._navbarService.updateNavbarTree();
             this.router.navigate(['/admin/categories']);
           } else {
             this._notificationService.info(response.message);

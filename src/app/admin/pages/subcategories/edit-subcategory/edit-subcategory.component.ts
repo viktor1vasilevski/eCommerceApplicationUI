@@ -6,6 +6,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
 import { CommonModule } from '@angular/common';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-edit-subcategory',
@@ -27,7 +28,8 @@ export class EditSubcategoryComponent implements OnInit {
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private _navbarService: NavbarService
   ) {
 
     this.route.params.subscribe(params => {
@@ -69,7 +71,6 @@ export class EditSubcategoryComponent implements OnInit {
       next: (response: any) => {
         if(response && response.success){
           this.categoryDropdown = response.data;
-          
         } else {
           this._notificationService.info(response.message)
         }
@@ -92,6 +93,7 @@ export class EditSubcategoryComponent implements OnInit {
       next:(response: any) => {
         if(response && response.success) {
           this._subcategoryService.notifySubcategoryEdited();
+          this._navbarService.updateNavbarTree();
           this._notificationService.success(response.message);
           this.router.navigate(['/admin/subcategories']);
         } else {

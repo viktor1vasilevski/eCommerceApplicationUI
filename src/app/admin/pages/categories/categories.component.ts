@@ -12,6 +12,7 @@ import { CategoryDTO } from '../../models/category/category-dto';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { NonGenericApiResponse } from '../../../core/models/responses/non-generic-api-response';
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { NavbarService } from '../../services/navbar.service';
 declare var bootstrap: any;
 
 @Component({
@@ -46,6 +47,7 @@ export class CategoriesComponent implements OnInit {
     private _categoryService: CategoryService,
     private _errorHandlerService: ErrorHandlerService,
     private _notificationService: NotificationService,
+    private _navbarService: NavbarService,
     private router: Router
   ) {
     this._categoryService.categoryAddedOrEdited$.subscribe(status => {
@@ -156,6 +158,7 @@ export class CategoriesComponent implements OnInit {
             this._notificationService.success(response.message);
             this.closeModal();
             this.loadCategories();
+            this._navbarService.updateNavbarTree();
           } else {
             this.closeModal();
             this._notificationService.info(response.message);

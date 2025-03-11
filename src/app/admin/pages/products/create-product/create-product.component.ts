@@ -6,6 +6,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
 import { ProductService } from '../../../../shared/services/product.service';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-create-product',
@@ -26,6 +27,7 @@ export class CreateProductComponent implements OnInit {
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
     private router: Router,
+    private _navbarService: NavbarService
   ) {
     this.createProductForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -89,6 +91,7 @@ export class CreateProductComponent implements OnInit {
       next: (response: any) => {
         this._notificationService.success(response.message);
         this._productService.notifyProductAddedOrEdited();
+        this._navbarService.updateNavbarTree();
         this.router.navigate(['/admin/products']);
         
       },

@@ -6,6 +6,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { CommonModule } from '@angular/common';
 import { SubcategoryService } from '../../../../shared/services/subcategory.service';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -27,6 +28,7 @@ export class EditProductComponent implements OnInit {
     private _subcategoryService: SubcategoryService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
+    private _navbarService: NavbarService,
     private router: Router
   ) {
     this.editProductForm = this.fb.group({
@@ -109,6 +111,7 @@ export class EditProductComponent implements OnInit {
         if(response && response.success) {
           this._notificationService.success(response.message);
           this._productService.notifyProductAddedOrEdited();
+          this._navbarService.updateNavbarTree();
           this.router.navigate(['/admin/products']);
         } else {
           this._notificationService.error(response.message)

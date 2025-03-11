@@ -7,6 +7,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { ApiResponse } from '../../../../core/models/responses/api-response';
 import { EditCategoryDTO } from '../../../models/category/edit-category-dto';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-edit-category',
@@ -26,6 +27,7 @@ export class EditCategoryComponent implements OnInit {
     private _categoryService: CategoryService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
+    private _navbarService: NavbarService
   ) {
     this.editCategoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -73,6 +75,7 @@ export class EditCategoryComponent implements OnInit {
       next:(response: any) => {
         if(response && response.success) {
           this._categoryService.notifyCategoryAddedOrEdited();
+          this._navbarService.updateNavbarTree();
           this._notificationService.success(response.message);
           this.router.navigate(['/admin/categories']);
         } else {
