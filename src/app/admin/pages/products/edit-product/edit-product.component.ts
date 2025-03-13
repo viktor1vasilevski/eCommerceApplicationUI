@@ -107,7 +107,6 @@ export class EditProductComponent implements OnInit {
     const editProductForm = this.editProductForm.value;
     this._productService.editProduct(this.selectedProductId, editProductForm).subscribe({
       next: (response: any) => {
-        debugger
         if(response && response.success) {
           this._notificationService.success(response.message);
           this._productService.notifyProductAddedOrEdited();

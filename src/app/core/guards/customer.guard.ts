@@ -10,7 +10,6 @@ export const customerGuard: CanActivateFn = (route, state) => {
 
   const user = authService.getRole();
 
-  debugger
   if (!user || user === 'Customer') {
     return true;
   }
