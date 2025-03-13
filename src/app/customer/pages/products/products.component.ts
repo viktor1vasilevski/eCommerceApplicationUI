@@ -75,6 +75,8 @@ export class ProductsComponent implements OnInit, OnDestroy  {
         next: (response: any) => {
           if(response && response.success && response.data) {
             this.products = response.data;
+            console.log(this.products);
+            
           } else {
             this._notificationService.info(response.message);
           }

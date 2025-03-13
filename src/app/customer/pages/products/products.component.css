@@ -1,25 +1,18 @@
-.custom-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.custom-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(0, 123, 255, 0.3);
-}
-
-.custom-footer {
-    background: linear-gradient(to right, #007bff, #0056b3);
-    color: white;
-}
-
 .product-image {
-    max-height: 300px;
-    width: auto;
-    max-width: 100%;
-    display: block;
-    margin: 0 auto;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    height: 200px;
+    object-fit: cover;
 }
 
+.custom-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Hover Effect to Pop the Card */
+.custom-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-footer {
+    padding: 0.75rem;
+}
