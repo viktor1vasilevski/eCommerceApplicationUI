@@ -1,1 +1,55 @@
-<p>product-details works!</p>
+<div class="container mt-5 mb-5">
+    <div class="row g-4">
+        <!-- Product Image -->
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <img [src]="product.imageBase64" class="card-img-top product-image" alt="{{ product.name }}">
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-7">
+            <h2 class="fw-bold">{{ product.name }}</h2>
+            <p class="text-muted">Category: <strong>{{ product.category }} - {{ product.subcategory }}</strong></p>
+
+            <ul class="list-unstyled">
+                <li><strong>Brand:</strong> {{ product.brand }}</li>
+                <li><strong>Price:</strong> {{ product.unitPrice | currency }}</li>
+                <li><strong>Volume:</strong> {{ product.volume }} ml</li>
+                <li><strong>Edition:</strong> {{ product.edition }}</li>
+                <li><strong>Scent:</strong> {{ product.scent }}</li>
+            </ul>
+
+            <!-- In Stock and Quantity Controls -->
+            <div class="mt-4">
+                <p><strong>In Stock:</strong> {{ product.unitQuantity }} units</p>
+
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity()"
+                        [disabled]="quantity <= 1">
+                        <i class="bi bi-dash"></i>
+                    </button>
+
+                    <span class="mx-3">{{ quantity }}</span>
+
+                    <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity()"
+                        [disabled]="quantity >= product.unitQuantity">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p class="mt-3">{{ product.description }}</p>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+                <button class="btn btn-success btn-lg" (click)="addToCart()">
+                    <i class="bi bi-cart"></i> Add to Cart
+                </button>
+                <button class="btn btn-primary btn-lg">
+                    <i class="bi bi-bag"></i> Buy Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

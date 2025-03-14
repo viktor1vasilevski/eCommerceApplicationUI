@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../shared/services/product.service';
 import { ProductRequest } from '../../../shared/models/product/product-request';
 import { Subscription } from 'rxjs';
@@ -46,7 +46,8 @@ export class ProductsComponent implements OnInit, OnDestroy  {
   constructor(private route: ActivatedRoute,
     private _productService: ProductService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private router: Router
   ) {}
 
 
@@ -64,10 +65,13 @@ export class ProductsComponent implements OnInit, OnDestroy  {
       this.loadProducts(this.productRequest)
     });
 
-
-
-
   }
+
+  viewDetails(product: any) {
+    debugger
+    this.router.navigate(['customer/product-details'], { state: { product } });
+  }
+  
 
 
   loadProducts(request: any) {
