@@ -42,15 +42,48 @@
 
                 <div class="d-flex align-items-center">
 
-                    <!-- Cart Icon with Item Count -->
-                    <button class="btn btn-outline-secondary position-relative me-3" type="button" routerLink="/cart">
-                        <i class="bi bi-cart"></i> <!-- Cart Icon -->
-                        <!-- Item count badge -->
-                        <span *ngIf="basketItemCount > 0"
-                            class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-circle">
-                            {{ basketItemCount }}
-                        </span>
-                    </button>
+                    <div class="dropdown">
+                        <button class="btn cart-btn position-relative" type="button" id="cartDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-cart"></i> <!-- Bootstrap Cart Icon -->
+                            <span *ngIf="basketItems.length > 0" class="cart-badge">
+                                {{ basketItems.length }}
+                            </span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <ul class="dropdown-menu cart-dropdown dropdown-menu-end" aria-labelledby="cartDropdown">
+                            <!-- If basket is empty -->
+                            <li *ngIf="basketItems.length === 0">
+                                <span class="dropdown-item text-muted text-center py-3">Your cart is empty</span>
+                            </li>
+
+                            <!-- List of items in the cart -->
+                            <li *ngFor="let item of basketItems">
+                                <div class="dropdown-item cart-item d-flex align-items-center">
+                                    <img [src]="item.imageBase64" alt="Product" class="cart-item-img">
+                                    <div class="cart-item-details">
+                                        <div class="cart-item-name">{{ item.name }}</div>
+                                        <div class="cart-item-price">{{ item.quantity }} x {{ item.price | currency }}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-remove" (click)="removeFromBasket(item)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </li>
+
+                            <!-- View Cart & Checkout -->
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-center cart-view-btn" routerLink="/cart">View Cart</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
 
                     <!-- Login and Register Buttons -->
                     <div *ngIf="!isLogged" class="d-flex gap-2">

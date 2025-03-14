@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit {
   email: string | null = "";
   categories: any[] = [];
   basketItemCount: number = 0;
+  basketItems: any[] = [];
 
   catId: string = "";
   categoryRequest: CategoryRequest = {
@@ -67,6 +68,7 @@ export class HeaderComponent implements OnInit {
 
     this._basketService.basketCountSubject.subscribe(basketItems => {
       console.log(basketItems);
+      this.basketItems = basketItems;
       this.basketItemCount = basketItems.length;
     })
   }
@@ -97,6 +99,11 @@ export class HeaderComponent implements OnInit {
   onLogout() : void {
     this._authManagerService.logout();
     this.router.navigate(['/home']);
+  }
+
+  removeFromBasket(item: any) {
+    console.log(item);
+    
   }
 
 }
