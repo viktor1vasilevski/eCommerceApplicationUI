@@ -4,12 +4,6 @@
             <!-- Brand -->
             <a class="navbar-brand fw-bold text-primary" href="#">E-Commerce App</a>
 
-            <!-- Toggler for Mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -17,8 +11,6 @@
                     <li *ngIf="role !== 'Admin'" class="nav-item">
                         <a class="nav-link active fw-semibold" aria-current="page" routerLink="/home">Home</a>
                     </li>
-
-
 
                     <li *ngIf="role !== 'Admin'" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="productsDropdown" role="button"
@@ -31,10 +23,6 @@
                                     <!-- Category item with a static right-facing arrow -->
                                     <a class="dropdown-item" href="#">
                                         {{ category.name }}
-                                        <span *ngIf="category.subcategories && category.subcategories.length > 0"
-                                            class="arrow">
-                                            <i class="fas fa-chevron-right"></i> <!-- Static right-facing arrow -->
-                                        </span>
                                     </a>
 
                                     <!-- Subcategories shown on hover -->
@@ -50,43 +38,28 @@
                             </ng-container>
                         </ul>
                     </li>
-
-
-                    <!-- Admin Menu -->
-                    <div *ngIf="role === 'Admin'">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" routerLink="/admin/categories">Categories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" routerLink="/admin/subcategories">Subcategories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" routerLink="/admin/products">Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" routerLink="/admin/users">Users</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Customer Menu -->
-                    <div *ngIf="role === 'Customer'">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" routerLink="/customer/orders">Orders</a>
-                            </li>
-                        </ul>
-                    </div>
                 </ul>
 
-                <!-- Authentication Buttons -->
                 <div class="d-flex align-items-center">
-                    <div *ngIf="!isLogged">
-                        <button class="btn btn-outline-primary me-2" type="button" routerLink="/login">Login</button>
+
+                    <!-- Cart Icon with Item Count -->
+                    <button class="btn btn-outline-secondary position-relative me-3" type="button" routerLink="/cart">
+                        <i class="bi bi-cart"></i> <!-- Cart Icon -->
+                        <!-- Item count badge -->
+                        <span *ngIf="cartItemCount > 0"
+                            class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-circle">
+                            {{ cartItemCount }}
+                        </span>
+                    </button>
+
+                    <!-- Login and Register Buttons -->
+                    <div *ngIf="!isLogged" class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" type="button" routerLink="/login">Login</button>
                         <button class="btn btn-primary" type="button" routerLink="/register">Register</button>
                     </div>
-                    <div *ngIf="isLogged" class="d-flex align-items-center">
+
+                    <!-- User Info and Logout Button -->
+                    <div *ngIf="isLogged" class="d-flex align-items-center ms-3">
                         <!-- User Info -->
                         <div class="me-3 text-end">
                             <div class="fw-semibold">{{ username }}</div>
@@ -94,6 +67,7 @@
                         </div>
                         <button class="btn btn-danger" type="button" (click)="onLogout()">Logout</button>
                     </div>
+
                 </div>
 
             </div>

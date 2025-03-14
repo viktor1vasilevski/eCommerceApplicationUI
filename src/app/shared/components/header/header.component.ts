@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthManagerService } from '../../services/auth-manager.service';
 import { CommonModule } from '@angular/common';
-import { SubcategoryService } from '../../services/subcategory.service';
 import { CategoryService } from '../../services/category.service';
 import { CategoryRequest } from '../../models/category/category-request';
 import { SortOrder } from '../../../core/enums/sort-order.enum';
@@ -24,6 +23,7 @@ export class HeaderComponent implements OnInit {
   username: string | null = '';
   email: string | null = "";
   categories: any[] = [];
+  cartItemCount: number = 0;
 
   catId: string = "";
   categoryRequest: CategoryRequest = {
