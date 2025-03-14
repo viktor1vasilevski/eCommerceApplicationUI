@@ -38,7 +38,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToBasket() {
-    console.log(this.product);
+    this._basketService.updateLocalBasketCount(this.product, this.quantity);
     
   }
 
