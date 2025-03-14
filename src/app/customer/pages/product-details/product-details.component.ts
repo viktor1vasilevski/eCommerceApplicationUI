@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { BasketService } from '../../services/basket.service';
 
 @Component({
   selector: 'app-product-details',
@@ -15,8 +16,9 @@ export class ProductDetailsComponent implements OnInit {
   product: any;
   quantity: number = 1;
 
-  constructor(private location: Location) {
-    debugger
+  constructor(private location: Location,
+    private _basketService: BasketService
+  ) {
 
   }
 
@@ -35,8 +37,9 @@ export class ProductDetailsComponent implements OnInit {
     this.quantity++;
   }
 
-  addToCart() {
-    console.log(`Adding ${this.quantity} of ${this.product.name} to cart`);
+  addToBasket() {
+    console.log(this.product);
+    
   }
 
 }
