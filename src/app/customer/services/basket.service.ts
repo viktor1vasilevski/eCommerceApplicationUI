@@ -1,16 +1,21 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { DataService } from '../../core/services/data.service';
+import { environment } from '../../../enviroments/enviroment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BasketService {
 
+  private baseUrl = environment.apiUrl;
+
   basketCountSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   basketItemsCount: number = 0;
   basketItemsList: any[] = [];
 
-  constructor() { }
+  constructor(private _dataApiService: DataService) {}
 
 
   updateLocalBasketCount(product: any, quantity: number): void {
@@ -35,6 +40,32 @@ export class BasketService {
     localStorage.setItem('basket', JSON.stringify(basketItems));
   
     this.basketCountSubject.next(basketItems);
+  }
+
+  getLocalBasket(): any {
+    const localBasket = localStorage.getItem('basket');
+    return localBasket ? JSON.parse(localBasket) : { products: [] };
+  }
+  
+  mergeBasketWithUser(userId: string): Observable<any> {
+    debugger
+    const localBasket = this.getLocalBasket();
+
+      // Ensure the structure matches AddToBasketRequest
+    const requestPayload = {
+      userId: userId,  // Explicitly set userId
+      items: localBasket.map((product: any) => ({
+        productId: product.id,   // Map the product ID correctly
+        quantity: product.quantity // Ensure quantity exists
+      }))
+    };
+
+    debugger
+    return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/ManageBasketByUserId/${userId}`, requestPayload);
+  }
+
+  setBasketItems(items: any) {
+    this.basketCountSubject.next(items);
   }
   
 }

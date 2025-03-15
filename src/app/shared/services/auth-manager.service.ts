@@ -10,6 +10,7 @@ export class AuthManagerService {
   private readonly ROLE_KEY = 'user_role';
   private readonly USERNAME_KEY = 'user_name';
   private readonly EMAIL_KEY = 'user_email';
+  private readonly USER_ID_KEY = 'user_id';
 
   private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
   loggedIn$ = this.loggedInSubject.asObservable();
@@ -23,14 +24,18 @@ export class AuthManagerService {
   private username = new BehaviorSubject<string | null>(this.getUsername());
   username$ = this.username.asObservable();
 
+  private userIdSubject = new BehaviorSubject<string | null>(this.getUserId());
+  userId$ = this.userIdSubject.asObservable();
+
   private usernameForLogin = new BehaviorSubject<string>("");
   getUsernameForLogin$ = this.usernameForLogin.asObservable();
 
   constructor() { }
 
-  setSession(email: string, token: string, role: string, username: string): void {
+  setSession(email: string, token: string, role: string, username: string, id: string): void {
     if (!token || !role || !username) return;
   
+    localStorage.setItem(this.USER_ID_KEY, id);
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.ROLE_KEY, role);
     localStorage.setItem(this.USERNAME_KEY, username);
@@ -51,6 +56,10 @@ export class AuthManagerService {
     return localStorage.getItem(this.EMAIL_KEY);
   }
 
+  getUserId(): string | null {
+    return localStorage.getItem(this.USER_ID_KEY);
+  }
+
   getUsername(): string | null {
     return localStorage.getItem(this.USERNAME_KEY);
   }
@@ -66,9 +75,12 @@ export class AuthManagerService {
     localStorage.removeItem(this.ROLE_KEY);
     localStorage.removeItem(this.USERNAME_KEY);
     localStorage.removeItem(this.EMAIL_KEY);
+    localStorage.removeItem(this.USER_ID_KEY);
+    localStorage.removeItem('basket');
     this.loggedInSubject.next(false);
     this.subjetRole.next(null);
     this.subjectEmail.next(null);
+    this.userIdSubject.next(null);
   }
 
   setLoggedInState(value: boolean, role?: string): void {

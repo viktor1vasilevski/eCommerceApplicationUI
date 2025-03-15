@@ -91,3 +91,8 @@
 .cart-view-btn:hover {
   color: #0056b3;
 }
+
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}

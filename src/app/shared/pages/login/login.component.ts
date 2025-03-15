@@ -8,6 +8,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { ApiResponse } from '../../../core/models/responses/api-response';
 import { LoginDTO } from '../../models/auth/login-dto';
+import { BasketService } from '../../../customer/services/basket.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent {
     private _authManagerService: AuthManagerService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private _basketService: BasketService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(5)]],
@@ -61,10 +63,23 @@ export class LoginComponent {
           this._notificationService.info(message);
           return;
         }
+        debugger
+        const { token, role, username, email, id } = data;
+
+        this._basketService.mergeBasketWithUser(id).subscribe({
+          next: (response: any) => {
+            if(response && response.success && response.data) {
+              this._basketService.setBasketItems(response.data);
+            }
+            
+          },
+          error: (errorResponse: any) => {
+            console.log(errorResponse);
+            
+          }
+        })
   
-        const { token, role, username, email } = data;
-  
-        this._authManagerService.setSession(email, token, role, username);
+        this._authManagerService.setSession(email, token, role, username, id);
         this._authManagerService.setLoggedInState(true, role);
         this._authManagerService.setUsernameAndEmail(username, email);
         this._notificationService.success(message);
