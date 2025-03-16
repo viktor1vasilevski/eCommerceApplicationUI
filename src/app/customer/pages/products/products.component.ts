@@ -68,7 +68,6 @@ export class ProductsComponent implements OnInit, OnDestroy  {
   }
 
   viewDetails(product: any) {
-    debugger
     this.router.navigate(['customer/product-details'], { state: { product } });
   }
   

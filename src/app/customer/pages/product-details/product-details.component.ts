@@ -24,9 +24,8 @@ export class ProductDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    debugger
     const state = this.location.getState() as any;
-    this.product = state.product; // Getting product from route state
+    this.product = state.product;
   }
 
   decreaseQuantity() {

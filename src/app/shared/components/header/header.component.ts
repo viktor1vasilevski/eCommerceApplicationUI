@@ -66,11 +66,19 @@ export class HeaderComponent implements OnInit {
       }
     }),
 
+    this._basketService.resetBasketSubject.subscribe(status => {
+      if(status) {
+        this.basketItemCount = 0;
+        this.basketItems = [];
+      }
+    })
+
     this._basketService.basketCountSubject.subscribe(basketItems => {
       console.log(basketItems);
-      debugger
       this.basketItems = basketItems;
       this.basketItemCount = basketItems.length;
+      // localStorage.removeItem('basket');
+      // localStorage.setItem('basket', basketItems);
     })
   }
 

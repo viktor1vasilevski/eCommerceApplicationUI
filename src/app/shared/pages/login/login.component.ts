@@ -65,19 +65,45 @@ export class LoginComponent {
         }
         debugger
         const { token, role, username, email, id } = data;
+        const localBasket = this._basketService.getLocalBasket();
 
-        this._basketService.mergeBasketWithUser(id).subscribe({
-          next: (response: any) => {
-            if(response && response.success && response.data) {
-              this._basketService.setBasketItems(response.data);
+        if(localBasket == null){
+          this._basketService.getBasketItemsByUserId(id).subscribe({
+            next: (response: any) => {
+              if(response && response.success && response.data) {
+                this._basketService.basketCountSubject.next(response.data);
+              } else {
+                this._notificationService.error(response.message);
+              }
+            },
+            error: (errorResponse: any) => {
+              this._errorHandlerService.handleErrors(errorResponse);
             }
-            
-          },
-          error: (errorResponse: any) => {
-            console.log(errorResponse);
-            
-          }
-        })
+          })
+        } else {
+          const requestPayload = {
+            userId: id,
+            items: localBasket.map((product: any) => ({
+              productId: product.id,
+              quantity: product.quantity
+            }))
+          };
+
+
+          this._basketService.manageBasketItemsByUserId(id, requestPayload).subscribe({
+            next: (response: any) => {
+              if(response && response.success && response.data) {
+                this._basketService.basketCountSubject.next(response.data);
+              } else {
+                this._notificationService.error(response.message);
+              }
+            },
+            error: (errorResponse: any) => {
+              this._errorHandlerService.handleErrors(errorResponse);
+            }
+          })
+        }
+
   
         this._authManagerService.setSession(email, token, role, username, id);
         this._authManagerService.setLoggedInState(true, role);

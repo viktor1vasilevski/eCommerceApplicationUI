@@ -12,6 +12,7 @@ export class BasketService {
   private baseUrl = environment.apiUrl;
 
   basketCountSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  resetBasketSubject: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   basketItemsCount: number = 0;
   basketItemsList: any[] = [];
 
@@ -44,25 +45,19 @@ export class BasketService {
 
   getLocalBasket(): any {
     const localBasket = localStorage.getItem('basket');
-    return localBasket ? JSON.parse(localBasket) : { products: [] };
+    return localBasket ? JSON.parse(localBasket) : null
   }
   
-  mergeBasketWithUser(userId: string): Observable<any> {
-    debugger
-    const localBasket = this.getLocalBasket();
-
-      // Ensure the structure matches AddToBasketRequest
-    const requestPayload = {
-      userId: userId,  // Explicitly set userId
-      items: localBasket.map((product: any) => ({
-        productId: product.id,   // Map the product ID correctly
-        quantity: product.quantity // Ensure quantity exists
-      }))
-    };
-
-    debugger
-    return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/ManageBasketByUserId/${userId}`, requestPayload);
+  manageBasketItemsByUserId(userId: string, request: any): Observable<any> {
+    return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/manageBasketItemsByUserId/${userId}`, request);
   }
+
+  getBasketItemsByUserId(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/userBasket/getBasketItemsByUserId/${userId}`;
+    return this._dataApiService.getById<any>(url);
+  }
+
+
 
   setBasketItems(items: any) {
     this.basketCountSubject.next(items);

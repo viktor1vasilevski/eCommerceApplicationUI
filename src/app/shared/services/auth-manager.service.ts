@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BasketService } from '../../customer/services/basket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class AuthManagerService {
   private usernameForLogin = new BehaviorSubject<string>("");
   getUsernameForLogin$ = this.usernameForLogin.asObservable();
 
-  constructor() { }
+  constructor(private _basketService: BasketService) { }
 
   setSession(email: string, token: string, role: string, username: string, id: string): void {
     if (!token || !role || !username) return;
@@ -81,6 +82,7 @@ export class AuthManagerService {
     this.subjetRole.next(null);
     this.subjectEmail.next(null);
     this.userIdSubject.next(null);
+    this._basketService.resetBasketSubject.next(true);
   }
 
   setLoggedInState(value: boolean, role?: string): void {
