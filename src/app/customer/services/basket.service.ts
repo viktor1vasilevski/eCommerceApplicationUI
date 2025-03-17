@@ -48,11 +48,11 @@ export class BasketService {
     return localBasket ? JSON.parse(localBasket) : null
   }
   
-  manageBasketItemsByUserId(userId: string, request: any): Observable<any> {
-    return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/manageBasketItemsByUserId/${userId}`, request);
+  manageBasketItemsByUserId(request: any): Observable<any> {
+    return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/manageBasketItemsByUserId`, request);
   }
 
-  getBasketItemsByUserId(userId: string): Observable<any> {
+  getBasketItemsByUserId(userId: string | null): Observable<any> {
     const url = `${this.baseUrl}/userBasket/getBasketItemsByUserId/${userId}`;
     return this._dataApiService.getById<any>(url);
   }

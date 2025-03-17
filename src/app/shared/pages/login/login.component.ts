@@ -51,7 +51,7 @@ export class LoginComponent {
       this._notificationService.info("Invalid form");
       return;
     }
-  
+    debugger
     this.isLoading = true;
     const loginForm = this.loginForm.value;
   
@@ -90,7 +90,7 @@ export class LoginComponent {
               }))
             };
   
-            this._basketService.manageBasketItemsByUserId(id, requestPayload).subscribe({
+            this._basketService.manageBasketItemsByUserId(requestPayload).subscribe({
               next: (response: any) => {
                 if(response && response.success && response.data) {
                   this._basketService.basketCountSubject.next(response.data);
@@ -111,7 +111,7 @@ export class LoginComponent {
         this._notificationService.success(message);
         this.loginForm.reset();
   
-        this.router.navigate([role === 'Admin' ? '/admin/categories' : '/customer/orders']);
+        this.router.navigate([role === 'Admin' ? '/admin/categories' : '/home']);
       },
       error: (errorResponse: ApiResponse<LoginDTO>) => {
         this.isLoading = false;

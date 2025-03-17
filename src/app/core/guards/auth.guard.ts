@@ -4,7 +4,7 @@ import { AuthManagerService } from '../../shared/services/auth-manager.service';
 import { ToastrService } from 'ngx-toastr';
 
 export const authGuard: CanActivateFn = (route, state) => {
-
+  debugger
   const authService = inject(AuthManagerService);
   const router = inject(Router);
   const toastr = inject(ToastrService);
