@@ -13,10 +13,11 @@ export const customerGuard: CanActivateFn = (route, state) => {
   const user = authService.getRole();
   const id = authService.getUserId();
 
+  debugger
   basketService.getBasketItemsByUserId(id).subscribe({
     next: (response: any) => {
       if(response && response.success && response.data) {
-        basketService.basketCountSubject.next(response.data);
+        basketService.setBasketItems(response.data);
       }
     },
     error: (errorResponse: any) => {

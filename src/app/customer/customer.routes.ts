@@ -17,4 +17,9 @@ export const customerRoutes: Routes = [
     loadComponent: () =>
       import('./pages/product-details/product-details.component').then((m) => m.ProductDetailsComponent),
   },
+  {
+    path: 'basket',
+    loadComponent: () =>
+      import('./pages/basket/basket.component').then((m) => m.BasketComponent),
+  },
 ];

@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DataService } from '../../core/services/data.service';
 import { environment } from '../../../enviroments/enviroment.dev';
+import { AuthService } from '../../shared/services/auth.service';
+import { AuthManagerService } from '../../shared/services/auth-manager.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { ErrorHandlerService } from '../../core/services/error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +19,17 @@ export class BasketService {
   basketItemsCount: number = 0;
   basketItemsList: any[] = [];
 
-  constructor(private _dataApiService: DataService) {}
+  constructor(private _dataApiService: DataService,
+    private _notificationService: NotificationService,
+    private _errorHandlerService: ErrorHandlerService
+  ) {
 
 
-  updateLocalBasketCount(product: any, quantity: number): void {
+  }
+
+
+  updateLocalBasketCount(product: any, quantity: number, userId: string | null): void {
+    debugger
     let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
   
     let productExists = false;
@@ -36,11 +46,35 @@ export class BasketService {
       product.quantity = quantity;
       basketItems.push(product);
     }
+    debugger
+
+    if(userId != undefined) {
+      const requestPayload = {
+        userId: userId,
+        items: basketItems.map((product: any) => ({
+          productId: product.id,
+          quantity: product.quantity
+        }))
+      };
+      debugger
+      this.manageBasketItemsByUserId(requestPayload).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this.setBasketItems(response.data);
+          } else {
+            this._notificationService.error(response.message);
+          }
+        },
+        error: (errorResponse: any) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      })
+
+    }
+
+
   
-    this.basketItemsCount = basketItems.length
-    localStorage.setItem('basket', JSON.stringify(basketItems));
-  
-    this.basketCountSubject.next(basketItems);
+    this.setBasketItems(basketItems);
   }
 
   getLocalBasket(): any {
@@ -53,13 +87,11 @@ export class BasketService {
   }
 
   getBasketItemsByUserId(userId: string | null): Observable<any> {
-    const url = `${this.baseUrl}/userBasket/getBasketItemsByUserId/${userId}`;
-    return this._dataApiService.getById<any>(url);
+    return this._dataApiService.getById<any>(`${this.baseUrl}/userBasket/getBasketItemsByUserId/${userId}`);
   }
 
-
-
   setBasketItems(items: any) {
+    localStorage.setItem('basket', JSON.stringify(items));
     this.basketCountSubject.next(items);
   }
   

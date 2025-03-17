@@ -12,6 +12,24 @@
                         <a class="nav-link active fw-semibold" aria-current="page" routerLink="/home">Home</a>
                     </li>
 
+                    <!-- Admin Menu -->
+                    <div *ngIf="role === 'Admin'">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/categories">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/subcategories">Subcategories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/products">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" routerLink="/admin/users">Users</a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <li *ngIf="role !== 'Admin'" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="productsDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,7 +60,7 @@
 
                 <div class="d-flex align-items-center">
 
-                    <div class="dropdown">
+                    <div class="dropdown" *ngIf="role !== 'Admin'">
                         <button class="btn cart-btn position-relative" type="button" id="cartDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-cart"></i> <!-- Bootstrap Cart Icon -->
@@ -78,7 +96,8 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item text-center cart-view-btn" routerLink="/cart">View Cart</a>
+                                <a class="dropdown-item text-center cart-view-btn" routerLink="/customer/basket">View
+                                    Basket</a>
                             </li>
                         </ul>
                     </div>

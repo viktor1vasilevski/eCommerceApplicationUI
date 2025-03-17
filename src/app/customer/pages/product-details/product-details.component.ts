@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { BasketService } from '../../services/basket.service';
+import { AuthManagerService } from '../../../shared/services/auth-manager.service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,7 +18,8 @@ export class ProductDetailsComponent implements OnInit {
   quantity: number = 1;
 
   constructor(private location: Location,
-    private _basketService: BasketService
+    private _basketService: BasketService,
+    private _authManagerService: AuthManagerService
   ) {
 
   }
@@ -37,7 +39,11 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToBasket() {
-    this._basketService.updateLocalBasketCount(this.product, this.quantity);
+    let userId = this._authManagerService.getUserId();
+
+
+
+    this._basketService.updateLocalBasketCount(this.product, this.quantity, userId);
     
   }
 
