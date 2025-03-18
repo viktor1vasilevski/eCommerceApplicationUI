@@ -1,1 +1,58 @@
-<p>basket works!</p>
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">🛒 Your Basket</h2>
+
+    <!-- If basket is empty -->
+    <div *ngIf="basketItems.length === 0" class="text-center text-muted p-4 border rounded bg-light">
+        <p class="fs-5">Your basket is empty.</p>
+        <a routerLink="/products" class="btn btn-primary">🛍 Continue Shopping</a>
+    </div>
+
+    <!-- Basket items -->
+    <div *ngIf="basketItems.length > 0" class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card basket-card mb-3 p-3" *ngFor="let item of basketItems">
+                <div class="row align-items-center g-3">
+                    <!-- Product Image -->
+                    <div class="col-md-2 text-center">
+                        <img [src]="item.imageBase64" alt="Product" class="img-fluid rounded shadow"
+                            style="max-width: 80px;">
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="col-md-4">
+                        <h5 class="fw-semibold">{{ item.name }}</h5>
+                        <p class="text-muted mb-0">Price: {{ item.unitPrice | currency }}</p>
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div class="col-md-3 d-flex align-items-center justify-content-center">
+                        <button class="btn btn-outline-dark btn-sm me-2" (click)="decreaseQuantity(item)">−</button>
+                        <span class="fw-bold px-2">{{ item.quantity }}</span>
+                        <button class="btn btn-outline-dark btn-sm ms-2" (click)="increaseQuantity(item)">+</button>
+                    </div>
+
+                    <!-- Remove Button & Item Total -->
+                    <div class="col-md-3 text-end">
+                        <p class="fw-bold fs-5 text-primary">{{ (item.quantity * item.unitPrice) | currency }}</p>
+                        <button class="btn btn-danger btn-sm mt-2 px-3" (click)="removeFromBasket(item)">
+                            <i class="bi bi-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basket Summary -->
+        <div class="col-lg-8">
+            <div class="card basket-summary p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold">Total:</h5>
+                    <h5 class="fw-bold text-light bg-success px-3 py-2 rounded">{{ getTotal() | currency }}</h5>
+                </div>
+                <button class="btn btn-success w-100 mt-3 py-2 fw-semibold" (click)="checkout()">
+                    ✅ Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

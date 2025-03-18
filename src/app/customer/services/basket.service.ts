@@ -28,6 +28,87 @@ export class BasketService {
   }
 
 
+  decreaseQuantity(product: any, userId: string | null): void {
+
+    debugger
+    let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
+  
+    for (let index = 0; index < basketItems.length; index++) {
+      if (basketItems[index].id === product.id) {
+        basketItems[index].quantity--;
+        break;
+      }
+    }
+  
+    if(userId != undefined) {
+      const requestPayload = {
+        userId: userId,
+        items: basketItems.map((product: any) => ({
+          productId: product.id,
+          quantity: product.quantity
+        }))
+      };
+      debugger
+      this.manageBasketItemsByUserId(requestPayload).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this.setBasketItems(response.data);
+          } else {
+            this._notificationService.error(response.message);
+          }
+        },
+        error: (errorResponse: any) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      })
+
+    }
+
+
+  
+    this.setBasketItems(basketItems);
+  }
+
+  increseQuantity(product: any, userId: string | null): void {
+
+    debugger
+    let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
+  
+    for (let index = 0; index < basketItems.length; index++) {
+      if (basketItems[index].id === product.id) {
+        basketItems[index].quantity++;
+      }
+    }
+  
+    if(userId != undefined) {
+      const requestPayload = {
+        userId: userId,
+        items: basketItems.map((product: any) => ({
+          productId: product.id,
+          quantity: product.quantity
+        }))
+      };
+      debugger
+      this.manageBasketItemsByUserId(requestPayload).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this.setBasketItems(response.data);
+          } else {
+            this._notificationService.error(response.message);
+          }
+        },
+        error: (errorResponse: any) => {
+          this._errorHandlerService.handleErrors(errorResponse);
+        }
+      })
+
+    }
+
+
+  
+    this.setBasketItems(basketItems);
+  }
+
   updateLocalBasketCount(product: any, quantity: number, userId: string | null): void {
     debugger
     let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
@@ -81,6 +162,7 @@ export class BasketService {
     const localBasket = localStorage.getItem('basket');
     return localBasket ? JSON.parse(localBasket) : null
   }
+
   
   manageBasketItemsByUserId(request: any): Observable<any> {
     return this._dataApiService.create<any, any>(`${this.baseUrl}/userbasket/manageBasketItemsByUserId`, request);
@@ -92,7 +174,12 @@ export class BasketService {
 
   setBasketItems(items: any) {
     localStorage.setItem('basket', JSON.stringify(items));
+    this.basketItemsList = items;
     this.basketCountSubject.next(items);
+  }
+
+  getBasketItems() {
+    return this.basketItemsList;
   }
   
 }

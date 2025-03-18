@@ -82,13 +82,22 @@
                                     <img [src]="item.imageBase64" alt="Product" class="cart-item-img">
                                     <div class="cart-item-details">
                                         <div class="cart-item-name">{{ item.name }}</div>
-                                        <div class="cart-item-price">{{ item.quantity }} x {{ item.price | currency }}
-                                        </div>
+                                        <div class="cart-item-price">{{ item.quantity }} x {{ item.unitPrice | currency
+                                            }}</div>
                                     </div>
                                     <button class="btn btn-sm btn-remove" (click)="removeFromBasket(item)">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
+                            </li>
+
+                            <!-- Total Sum -->
+                            <li *ngIf="basketItems.length > 0">
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li *ngIf="basketItems.length > 0" class="d-flex justify-content-between px-3 py-2">
+                                <strong>Total:</strong>
+                                <span>{{ getTotal() | currency }}</span>
                             </li>
 
                             <!-- View Cart & Checkout -->
@@ -100,6 +109,7 @@
                                     Basket</a>
                             </li>
                         </ul>
+
                     </div>
 
 

@@ -40,9 +40,6 @@ export class ProductDetailsComponent implements OnInit {
 
   addToBasket() {
     let userId = this._authManagerService.getUserId();
-
-
-
     this._basketService.updateLocalBasketCount(this.product, this.quantity, userId);
     
   }

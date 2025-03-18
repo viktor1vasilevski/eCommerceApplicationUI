@@ -100,6 +100,9 @@ export class HeaderComponent implements OnInit {
     });
   }
   
+  getTotal(): number {
+    return this.basketItems.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+  }
 
 
   onLogout() : void {

@@ -1,0 +1,22 @@
+body {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.basket-card {
+    background: linear-gradient(to right, #ffffff, #f8f9fa);
+    border-left: 5px solid #0d6efd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.basket-card:hover {
+    transform: scale(1.02);
+}
+
+.basket-summary {
+    background: #343a40;
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
