@@ -104,7 +104,7 @@ export class ProductsComponent implements OnInit {
         
       },
       error: (errorResponse: any) => {
-        console.log(errorResponse);
+
         
       }
     })

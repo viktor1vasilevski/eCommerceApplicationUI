@@ -111,8 +111,7 @@ export class HeaderComponent implements OnInit {
   }
 
   removeFromBasket(item: any) {
-    console.log(item);
-    
+    console.log(item);    
   }
 
 }

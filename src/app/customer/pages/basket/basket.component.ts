@@ -24,6 +24,8 @@ export class BasketComponent implements OnInit {
 
   ngOnInit(): void {
     this.basketItems = this._basketService.getLocalBasket();
+    console.log(this.basketItems);
+    
   }
 
 
@@ -50,7 +52,7 @@ export class BasketComponent implements OnInit {
   }
 
   checkout(): void {
-      console.log("Proceeding to checkout...");
+
       // Implement checkout logic
   }
 

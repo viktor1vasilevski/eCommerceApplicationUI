@@ -14,7 +14,8 @@
                 <div class="row align-items-center">
                     <!-- Product Image -->
                     <div class="col-3 text-center">
-                        <img [src]="item.imageBase64" alt="Product" class="img-fluid rounded" style="max-width: 70px;">
+                        <img *ngIf="item.imageBase64" [src]="item.imageBase64" alt="Product" class="img-fluid rounded"
+                            style="max-width: 70px;">
                     </div>
 
                     <!-- Product Details -->
