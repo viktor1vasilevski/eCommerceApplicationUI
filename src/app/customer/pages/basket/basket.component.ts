@@ -33,13 +33,13 @@ export class BasketComponent implements OnInit {
   }
 
   increaseQuantity(item: any): void {
-    debugger
+
     let userId = this._authManagerService.getUserId();
     this._basketService.increseQuantity(item, userId)
   }
 
   decreaseQuantity(item: any): void {
-    debugger
+
     let userId = this._authManagerService.getUserId();
 
     this._basketService.decreaseQuantity(item, userId)

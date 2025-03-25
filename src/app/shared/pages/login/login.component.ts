@@ -51,7 +51,6 @@ export class LoginComponent {
       this._notificationService.info("Invalid form");
       return;
     }
-    debugger
     this.isLoading = true;
     const loginForm = this.loginForm.value;
   
@@ -63,10 +62,8 @@ export class LoginComponent {
           this._notificationService.info(message);
           return;
         }
-        debugger
         const { token, role, username, email, id } = data;
         const localBasket = this._basketService.getLocalBasket();
-        debugger
         if(role == "Customer") {
           if(localBasket == null){
             this._basketService.getBasketItemsByUserId(id).subscribe({

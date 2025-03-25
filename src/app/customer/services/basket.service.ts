@@ -30,7 +30,7 @@ export class BasketService {
 
   decreaseQuantity(product: any, userId: string | null): void {
 
-    debugger
+
     let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
   
     for (let index = 0; index < basketItems.length; index++) {
@@ -48,7 +48,7 @@ export class BasketService {
           quantity: product.quantity
         }))
       };
-      debugger
+
       this.manageBasketItemsByUserId(requestPayload).subscribe({
         next: (response: any) => {
           if(response && response.success && response.data) {
@@ -71,7 +71,6 @@ export class BasketService {
 
   increseQuantity(product: any, userId: string | null): void {
 
-    debugger
     let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
   
     for (let index = 0; index < basketItems.length; index++) {
@@ -88,7 +87,6 @@ export class BasketService {
           quantity: product.quantity
         }))
       };
-      debugger
       this.manageBasketItemsByUserId(requestPayload).subscribe({
         next: (response: any) => {
           if(response && response.success && response.data) {
@@ -110,7 +108,6 @@ export class BasketService {
   }
 
   updateLocalBasketCount(product: any, quantity: number, userId: string | null): void {
-    debugger
     let basketItems = JSON.parse(localStorage.getItem('basket') || '[]');
   
     let productExists = false;
@@ -127,7 +124,6 @@ export class BasketService {
       product.quantity = quantity;
       basketItems.push(product);
     }
-    debugger
 
     if(userId != undefined) {
       const requestPayload = {
@@ -137,7 +133,6 @@ export class BasketService {
           quantity: product.quantity
         }))
       };
-      debugger
       this.manageBasketItemsByUserId(requestPayload).subscribe({
         next: (response: any) => {
           if(response && response.success && response.data) {

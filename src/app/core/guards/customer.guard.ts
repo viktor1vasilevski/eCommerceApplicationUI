@@ -9,11 +9,10 @@ export const customerGuard: CanActivateFn = (route, state) => {
   const basketService = inject(BasketService);
   const router = inject(Router);
   const toastr = inject(ToastrService);
-  debugger
+
   const user = authService.getRole();
   const id = authService.getUserId();
 
-  debugger
   basketService.getBasketItemsByUserId(id).subscribe({
     next: (response: any) => {
       if(response && response.success && response.data) {
