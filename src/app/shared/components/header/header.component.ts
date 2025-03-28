@@ -73,9 +73,9 @@ export class HeaderComponent implements OnInit {
       }
     })
 
-    this._basketService.basketCountSubject.subscribe(basketItems => {
-      this.basketItems = basketItems;
-      this.basketItemCount = basketItems.length;
+    this._basketService.basketItems$.subscribe(items => {
+      this.basketItems = items;
+      this.basketItemCount = items.length;
     })
   }
 

@@ -17,8 +17,8 @@ export class BasketComponent implements OnInit {
     private _authManagerService: AuthManagerService
   ) {
 
-    this._basketService.basketCountSubject.subscribe(stat => {
-      this.basketItems = stat;
+    this._basketService.basketItems$.subscribe(items => {
+      this.basketItems = items;
     })
   }
 
@@ -48,7 +48,7 @@ export class BasketComponent implements OnInit {
   }
 
   removeFromBasket(item: any): void {
-      this.basketItems = this.basketItems.filter(b => b !== item);
+    //this.basketItems = this.basketItems.filter(b => b !== item);
   }
 
   checkout(): void {

@@ -14,7 +14,9 @@ export class BasketService {
 
   private baseUrl = environment.apiUrl;
 
-  basketCountSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private readonly basketItemsSubject = new BehaviorSubject<any[]>([]);  
+  public readonly basketItems$ = this.basketItemsSubject.asObservable();
+
   resetBasketSubject: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   basketItemsCount: number = 0;
   basketItemsList: any[] = [];
@@ -170,7 +172,12 @@ export class BasketService {
   setBasketItems(items: any) {
     localStorage.setItem('basket', JSON.stringify(items));
     this.basketItemsList = items;
-    this.basketCountSubject.next(items);
+    this.basketItemsSubject.next(items);
+  }
+
+  addToBasket(item: any) {
+    const currentItems = this.basketItemsSubject.getValue(); // Get current state
+    this.basketItemsSubject.next([...currentItems, item]); // Emit updated state
   }
 
   getBasketItems() {

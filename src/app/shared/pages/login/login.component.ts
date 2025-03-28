@@ -69,7 +69,7 @@ export class LoginComponent {
             this._basketService.getBasketItemsByUserId(id).subscribe({
               next: (response: any) => {
                 if(response && response.success && response.data) {
-                  this._basketService.basketCountSubject.next(response.data);
+                  this._basketService.addToBasket(response.data);
                 } else {
                   this._notificationService.error(response.message);
                 }
@@ -90,7 +90,7 @@ export class LoginComponent {
             this._basketService.manageBasketItemsByUserId(requestPayload).subscribe({
               next: (response: any) => {
                 if(response && response.success && response.data) {
-                  this._basketService.basketCountSubject.next(response.data);
+                  this._basketService.addToBasket(response.data);
                 } else {
                   this._notificationService.error(response.message);
                 }
