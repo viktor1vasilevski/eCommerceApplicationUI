@@ -56,10 +56,6 @@ export class EditCategoryComponent implements OnInit {
         }
       })
 
-
-      //this.categoryId = params['id']; // Get the category ID from the route
-      // Now you can use this.categoryId to fetch data for editing
-      //console.log('Editing category with ID:', this.categoryId);
     });
   }
 

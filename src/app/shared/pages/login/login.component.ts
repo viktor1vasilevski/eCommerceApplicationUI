@@ -8,7 +8,6 @@ import { NotificationService } from '../../../core/services/notification.service
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { ApiResponse } from '../../../core/models/responses/api-response';
 import { LoginDTO } from '../../models/auth/login-dto';
-import { BasketService } from '../../../customer/services/basket.service';
 
 @Component({
   selector: 'app-login',
@@ -29,8 +28,7 @@ export class LoginComponent {
     private _authManagerService: AuthManagerService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
-    private router: Router,
-    private _basketService: BasketService
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(5)]],
@@ -63,44 +61,6 @@ export class LoginComponent {
           return;
         }
         const { token, role, username, email, id } = data;
-        const localBasket = this._basketService.getLocalBasket();
-        if(role == "Customer") {
-          if(localBasket == null){
-            this._basketService.getBasketItemsByUserId(id).subscribe({
-              next: (response: any) => {
-                if(response && response.success && response.data) {
-                  this._basketService.addToBasket(response.data);
-                } else {
-                  this._notificationService.error(response.message);
-                }
-              },
-              error: (errorResponse: any) => {
-                this._errorHandlerService.handleErrors(errorResponse);
-              }
-            })
-          } else {
-            const requestPayload = {
-              userId: id,
-              items: localBasket.map((product: any) => ({
-                productId: product.id,
-                quantity: product.quantity
-              }))
-            };
-  
-            this._basketService.manageBasketItemsByUserId(requestPayload).subscribe({
-              next: (response: any) => {
-                if(response && response.success && response.data) {
-                  this._basketService.addToBasket(response.data);
-                } else {
-                  this._notificationService.error(response.message);
-                }
-              },
-              error: (errorResponse: any) => {
-                this._errorHandlerService.handleErrors(errorResponse);
-              }
-            })
-          }
-        }
 
         this._authManagerService.setSession(email, token, role, username, id);
         this._authManagerService.setLoggedInState(true, role);

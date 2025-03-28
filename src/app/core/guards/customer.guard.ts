@@ -2,29 +2,14 @@ import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthManagerService } from '../../shared/services/auth-manager.service';
 import { ToastrService } from 'ngx-toastr';
-import { BasketService } from '../../customer/services/basket.service';
 
 export const customerGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthManagerService);
-  const basketService = inject(BasketService);
   const router = inject(Router);
   const toastr = inject(ToastrService);
 
   const user = authService.getRole();
   const id = authService.getUserId();
-
-  if((id != null && user == 'Customer') || (id != undefined && user == 'Customer')) {
-    basketService.getBasketItemsByUserId(id).subscribe({
-      next: (response: any) => {
-        if(response && response.success && response.data) {
-          basketService.setBasketItems(response.data);
-        }
-      },
-      error: (errorResponse: any) => {
-  
-      }
-    });
-  }
 
 
 

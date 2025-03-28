@@ -8,7 +8,6 @@ import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { NavbarService } from '../../../admin/services/navbar.service';
-import { BasketService } from '../../../customer/services/basket.service';
 
 @Component({
   selector: 'app-header',
@@ -41,8 +40,7 @@ export class HeaderComponent implements OnInit {
     private _navbarService: NavbarService,
     private _categoryService: CategoryService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService,
-    private _basketService: BasketService
+    private _errorHandlerService: ErrorHandlerService
   ) {
     this._authManagerService.role$.subscribe(role => {
       this.role = role;
@@ -64,19 +62,9 @@ export class HeaderComponent implements OnInit {
       if(status) {
         this.loadCategoriesWithSubcategories();
       }
-    }),
-
-    this._basketService.resetBasketSubject.subscribe(status => {
-      if(status) {
-        this.basketItemCount = 0;
-        this.basketItems = [];
-      }
     })
 
-    this._basketService.basketItems$.subscribe(items => {
-      this.basketItems = items;
-      this.basketItemCount = items.length;
-    })
+  
   }
 
 
@@ -111,7 +99,7 @@ export class HeaderComponent implements OnInit {
   }
 
   removeFromBasket(item: any) {
-    console.log(item);    
+   
   }
 
 }
