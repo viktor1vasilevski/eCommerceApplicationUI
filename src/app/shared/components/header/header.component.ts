@@ -8,6 +8,7 @@ import { SortOrder } from '../../../core/enums/sort-order.enum';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { NavbarService } from '../../../admin/services/navbar.service';
+import { BasketService } from '../../../customer/services/basket.service';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +41,8 @@ export class HeaderComponent implements OnInit {
     private _navbarService: NavbarService,
     private _categoryService: CategoryService,
     private _notificationService: NotificationService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private _basketService: BasketService
   ) {
     this._authManagerService.role$.subscribe(role => {
       this.role = role;
@@ -63,6 +65,9 @@ export class HeaderComponent implements OnInit {
         this.loadCategoriesWithSubcategories();
       }
     })
+
+    this._basketService.basket$.subscribe(items => { console.log(items);
+     this.basketItems = items})
 
   
   }

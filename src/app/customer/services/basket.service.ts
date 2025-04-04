@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 interface BasketItem {
   productId: number;
   quantity: number;
+  unitPrice: number;
+  imageBase64: string;
 }
 
 @Injectable({
@@ -26,14 +28,14 @@ export class BasketService {
     localStorage.setItem(this.basketKey, JSON.stringify(basket));
   }
 
-  addItem(productId: number, quantity: number = 1): void {
+  addItem(productId: number, unitPrice: number, imageBase64: string, quantity: number = 1): void {
     const currentBasket = this.basketSubject.value;
     const existingItem = currentBasket.find(item => item.productId === productId);
 
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
-      currentBasket.push({ productId, quantity });
+      currentBasket.push({ productId, unitPrice, imageBase64, quantity });
     }
 
     this.updateBasket(currentBasket);
