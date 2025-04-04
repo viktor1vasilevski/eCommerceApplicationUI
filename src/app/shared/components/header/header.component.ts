@@ -105,6 +105,12 @@ export class HeaderComponent implements OnInit {
 
   removeFromBasket(item: any) {
    
+    if(this._authManagerService.isLoggedIn()) {
+      console.log('remove from local database');
+    } else {
+      this._basketService.removeItem(item.productId)
+    }
+   
   }
 
 }
