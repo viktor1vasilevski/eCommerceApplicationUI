@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DataService } from '../../core/services/data.service';
+import { environment } from '../../../enviroments/enviroment.dev';
 
 interface BasketItem {
   productId: number;
@@ -12,14 +14,27 @@ interface BasketItem {
   providedIn: 'root'
 })
 export class BasketService {
-  private basketKey = 'basket';
-  private basketSubject: BehaviorSubject<BasketItem[]> = new BehaviorSubject<BasketItem[]>(this.loadBasketFromStorage());
 
+  private baseUrl = environment.apiUrl;
+
+  private basketKey = 'basket';
+
+  private basketSubject: BehaviorSubject<BasketItem[]> = new BehaviorSubject<BasketItem[]>(this.loadBasketFromStorage());
   basket$: Observable<BasketItem[]> = this.basketSubject.asObservable(); // Public observable
 
-  constructor() {}
+  constructor(private _dataApiService: DataService) {}
 
-  private loadBasketFromStorage(): BasketItem[] {
+  getBasketItemsByUserId(userId: string | null): Observable<any> {
+    const url = `${this.baseUrl}/userBasket/getBasketItemsByUserId/${userId}`;
+    return this._dataApiService.getById<any>(url);
+  }
+
+  mergeBasketItemsForUserId(userId: string, request: any): Observable<any> {
+    const url = `${this.baseUrl}/userBasket/mergeBasketItemsForUserId/${userId}`
+    return this._dataApiService.create<any, any>(url, request);
+  }
+
+  loadBasketFromStorage(): BasketItem[] {
     const savedBasket = localStorage.getItem(this.basketKey);
     return savedBasket ? JSON.parse(savedBasket) : [];
   }
@@ -61,5 +76,10 @@ export class BasketService {
   private updateBasket(newBasket: BasketItem[]): void {
     this.basketSubject.next(newBasket);
     this.saveBasketToStorage(newBasket);
+  }
+
+  public updateBasketA(items: any): void {
+    this.basketSubject.next(items);
+    this.saveBasketToStorage(items);
   }
 }

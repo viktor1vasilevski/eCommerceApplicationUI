@@ -8,6 +8,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { ApiResponse } from '../../../core/models/responses/api-response';
 import { LoginDTO } from '../../models/auth/login-dto';
+import { BasketService } from '../../../customer/services/basket.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent {
     private _authManagerService: AuthManagerService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private _basketService: BasketService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(5)]],
@@ -67,6 +69,34 @@ export class LoginComponent {
         this._authManagerService.setUsernameAndEmail(username, email);
         this._notificationService.success(message);
         this.loginForm.reset();
+
+        let localStorageItems = this._basketService.loadBasketFromStorage();
+        const request = { items: localStorageItems };
+        if(role == 'Customer' && localStorageItems.length > 0) {
+          this._basketService.mergeBasketItemsForUserId(id, request).subscribe({
+            next: (response: any) => {
+              this._basketService.updateBasketA(response.data);      
+            },
+            error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+          })
+          
+        }
+
+        if(role == 'Customer' && localStorageItems.length == 0) {
+          this._basketService.getBasketItemsByUserId(id).subscribe({
+            next: (response: any) => {
+              if(response && response.success && response.data) {
+                this._basketService.updateBasketA(response.data);
+              } else {
+                this._notificationService.error(response.message);
+              }
+            },
+            error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+          })
+          
+        }
+
+
   
         this.router.navigate([role === 'Admin' ? '/admin/categories' : '/home']);
       },
