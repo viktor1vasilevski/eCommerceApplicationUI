@@ -34,6 +34,11 @@ export class BasketService {
     return this._dataApiService.create<any, any>(url, request);
   }
 
+  removeBasketItemsForUser(userId: string | null, itemId: string): Observable<any> {
+    const url = `${this.baseUrl}/userBasket/removeBasketItemsForUser/${userId}/${itemId}`;
+    return this._dataApiService.delete<any>(url);
+  }
+
   loadBasketFromStorage(): BasketItem[] {
     const savedBasket = localStorage.getItem(this.basketKey);
     return savedBasket ? JSON.parse(savedBasket) : [];
@@ -58,7 +63,7 @@ export class BasketService {
 
   removeItem(id: number): void {
     const updatedBasket = this.basketSubject.value.filter(item => item.productId !== id);
-    this.updateBasket(updatedBasket);
+    this.updateBasketA(updatedBasket);
   }
 
   updateItemQuantity(id: number, quantity: number): void {

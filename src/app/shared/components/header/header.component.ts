@@ -87,9 +87,7 @@ export class HeaderComponent implements OnInit {
           this._notificationService.error(response.message);
         }
       },
-      error: (errorResponse: any) => {
-        this._errorHandlerService.handleErrors(errorResponse);
-      }
+      error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
     });
   }
   
@@ -106,7 +104,18 @@ export class HeaderComponent implements OnInit {
   removeFromBasket(item: any) {
    
     if(this._authManagerService.isLoggedIn()) {
-      console.log('remove from local database');
+      this._basketService.removeBasketItemsForUser(this._authManagerService.getUserId(), item.id).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this._basketService.updateBasketA(response.data);
+            this._notificationService.success(response.message);
+          } else {
+            this._notificationService.error(response.message);
+          }
+          
+        },
+        error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+      })
     } else {
       this._basketService.removeItem(item.productId)
     }
