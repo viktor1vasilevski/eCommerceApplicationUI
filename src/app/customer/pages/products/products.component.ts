@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { CommonModule } from '@angular/common';
+import { BasketService } from '../../services/basket.service';
+import { AuthManagerService } from '../../../shared/services/auth-manager.service';
 
 @Component({
   selector: 'app-products',
@@ -45,8 +47,10 @@ export class ProductsComponent implements OnInit, OnDestroy  {
 
   constructor(private route: ActivatedRoute,
     private _productService: ProductService,
+    private _basketService: BasketService,
     private _notificationService: NotificationService,
     private _errorHandlerService: ErrorHandlerService,
+    private _authManagerService: AuthManagerService,
     private router: Router
   ) {}
 
@@ -81,12 +85,30 @@ export class ProductsComponent implements OnInit, OnDestroy  {
 
             
           } else {
-            this._notificationService.info(response.message);
+            this._notificationService.error(response.message);
           }
         },
-        error: (errorResponse: any) => {
-          this._errorHandlerService.handleErrors(errorResponse);
-        }
+        error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
       })
+  }
+
+  AddToBasket(item: any) {
+
+    if(this._authManagerService.isLoggedIn()) {
+      let userId = this._authManagerService.getUserId();
+      this._basketService.addToBasket(userId, item.id).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this._basketService.updateBasketA(response.data)
+            this._notificationService.success(response.message);
+          } else {
+            this._notificationService.error(response.message);
+          }
+        },
+        error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+      })
+    }
+
+
   }
 }

@@ -18,7 +18,7 @@ export class DataService {
   }
 
   create<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {
-    return this.http.post<ResponseType>(url, data);
+    return this.http.post<ResponseType>(url, data ?? null);
   }
 
   put<RequestType, ResponseType>(url: string, data: RequestType): Observable<ResponseType> {

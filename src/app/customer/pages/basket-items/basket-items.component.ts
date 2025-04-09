@@ -32,7 +32,8 @@ export class BasketItemsComponent implements OnInit {
   }
 
   removeFromBasket(item: any) {
-   
+   let role = this._authManagerService.getRole();
+   if(role == 'Customer') {
     if(this._authManagerService.isLoggedIn()) {
       this._basketService.removeBasketItemsForUser(this._authManagerService.getUserId(), item.id).subscribe({
         next: (response: any) => {
@@ -49,6 +50,8 @@ export class BasketItemsComponent implements OnInit {
     } else {
       this._basketService.removeItem(item.productId)
     }
+   }
+
    
   }
 

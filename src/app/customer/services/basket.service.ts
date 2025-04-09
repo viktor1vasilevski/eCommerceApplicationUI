@@ -87,4 +87,9 @@ export class BasketService {
     this.basketSubject.next(items);
     this.saveBasketToStorage(items);
   }
+
+  public addToBasket(userId: string | null, itemId: string) {
+    const url = `${this.baseUrl}/userBasket/addToBasket/${userId}/${itemId}`
+    return this._dataApiService.create<any, any>(url, null);
+  }
 }
