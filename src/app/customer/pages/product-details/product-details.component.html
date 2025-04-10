@@ -1,33 +1,41 @@
-<div class="container mt-4">
-    <div class="row">
-        <!-- Product Image Section -->
-        <div class="col-md-5">
-            <div class="card">
-                <img [src]="product.imageBase64" [alt]="product.name" class="card-img-top img-fluid" />
+<div class="container my-5">
+    <div class="row g-5 align-items-start product-detail">
+        <!-- Product Image -->
+        <div class="col-lg-5">
+            <div class="product-image-wrapper rounded shadow-sm overflow-hidden">
+                <img [src]="product.imageBase64" [alt]="product.name" class="img-fluid w-100" />
             </div>
         </div>
 
-        <!-- Product Info Section -->
-        <div class="col-md-7">
-            <h2 class="text-primary">{{ product.name }}</h2>
-            <p class="text-muted mb-1"><strong>Brand:</strong> {{ product.brand }}</p>
-            <p class="text-muted mb-1"><strong>Category:</strong> {{ product.category }} - {{ product.subcategory }}</p>
-            <p class="text-muted mb-1"><strong>Edition:</strong> {{ product.edition }}</p>
-            <p class="fs-4 text-success"><strong>Price: ${{ product.unitPrice }}</strong></p>
-            <p><strong>Quantity Available:</strong> {{ product.unitQuantity }}</p>
-            <p><strong>Volume:</strong> {{ product.volume }} ml</p>
-            <p class="text-secondary">{{ product.description }}</p>
+        <!-- Product Info -->
+        <div class="col-lg-7">
+            <div class="product-info">
+                <h1 class="display-6 fw-semibold text-dark">{{ product.name }}</h1>
+                <p class="text-muted"><strong>Brand:</strong> {{ product.brand }}</p>
+                <p class="text-muted"><strong>Category:</strong> {{ product.category }} / {{ product.subcategory }}</p>
+                <p class="text-muted"><strong>Edition:</strong> {{ product.edition }}</p>
 
-            <!-- Quantity Control -->
-            <div class="d-flex align-items-center my-3">
-                <button class="btn btn-outline-secondary me-2" (click)="updateQuantity('decrease')">-</button>
-                <span class="mx-2 fs-5">{{ selectedQuantity }}</span>
-                <button class="btn btn-outline-secondary ms-2" (click)="updateQuantity('increase')">+</button>
+                <div class="my-3">
+                    <p class="h4 text-success fw-bold">Price: ${{ product.unitPrice }}</p>
+                    <p><strong>Available:</strong> {{ product.unitQuantity }} units</p>
+                    <p><strong>Volume:</strong> {{ product.volume }} ml</p>
+                </div>
+
+                <p class="text-secondary lh-base">{{ product.description }}</p>
+
+                <!-- Quantity Selector -->
+                <div class="d-flex align-items-center my-4">
+                    <button class="btn btn-outline-secondary px-3" (click)="updateQuantity('decrease')">-</button>
+                    <span class="mx-3 fs-5">{{ selectedQuantity }}</span>
+                    <button class="btn btn-outline-secondary px-3" (click)="updateQuantity('increase')">+</button>
+                </div>
+
+                <!-- Add to Basket -->
+                <button class="btn btn-primary btn-lg d-flex align-items-center gap-2" (click)="addToBasket(product)">
+                    <i class="bi bi-cart-plus fs-5"></i>
+                    Add to Basket
+                </button>
             </div>
-
-            <button class="btn btn-primary" (click)="addToBasket(product)">
-                <i class="bi bi-cart-plus"></i> Add to Basket
-            </button>
         </div>
     </div>
 </div>

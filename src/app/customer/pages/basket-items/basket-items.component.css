@@ -1,10 +1,28 @@
+.basket-wrapper {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.basket-img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .basket-item {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.basket-item:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .basket-img {
+    max-width: 80px;
+    max-height: 80px;
   }
-  
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-  
+}
