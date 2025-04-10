@@ -47,18 +47,17 @@ export class BasketItemsComponent implements OnInit {
         },
         error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
       })
-    } else {
-      this._basketService.removeItem(item.productId)
-    }
+    } 
+   } else {
+    this._basketService.removeItem(item.productId)
    }
 
    
   }
 
   updateQuantity(action: string) {
-
     if (action === 'increase') {
-      if (this.selectedQuantity < this.product.unitQuantity) {
+      if (this.selectedQuantity < this.product.quantity) {
         this.selectedQuantity++;
       }
     } else if (action === 'decrease') {

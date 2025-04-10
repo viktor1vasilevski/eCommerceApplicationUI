@@ -29,7 +29,7 @@ export class BasketService {
     return this._dataApiService.getById<any>(url);
   }
 
-  mergeBasketItemsForUserId(userId: string, request: any): Observable<any> {
+  mergeBasketItemsForUserId(userId: string | null, request: any): Observable<any> {
     const url = `${this.baseUrl}/userBasket/mergeBasketItemsForUserId/${userId}`
     return this._dataApiService.create<any, any>(url, request);
   }

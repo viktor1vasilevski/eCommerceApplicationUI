@@ -28,24 +28,27 @@ export class ProductDetailsComponent {
   }
 
   addToBasket(product: any) {
-
+    debugger
     if(this._authManagerService.isLoggedIn()) {
       
-      let basketItems = this._basketService.loadBasketFromStorage();
-      if(basketItems.length == 0) {
-        console.log('ovde nema vo local storage nisto, odi zemi za toj user basket items');
-        
-      } else {
-        console.log('ovde treba merdzajne');
-      }
-      
-      
+      let userId = this._authManagerService.getUserId();
+      const request = { items: [{ productId: product.id, quantity: this.selectedQuantity }] };
+
+      this._basketService.mergeBasketItemsForUserId(userId, request).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this._basketService.updateBasketA(response.data);
+            this._notificationService.success(response.message);
+          } else {
+            this._notificationService.error(response.message);
+          } 
+        },
+        error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+      })      
     } else {
       this._basketService.addItem(product.id, product.unitPrice, product.imageBase64, this.selectedQuantity);
+      this._notificationService.success('Item added to your basket!');
     }
-
-    this._notificationService.success('Item added to your basket!')
-
   }
 
   updateQuantity(action: string) {
