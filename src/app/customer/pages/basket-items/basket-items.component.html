@@ -2,28 +2,32 @@
   <div class="basket-wrapper p-4 shadow-sm rounded bg-white">
     <h3 class="mb-4">Your Basket</h3>
 
+    <!-- Basket Items -->
     <div class="card mb-4 basket-item p-3" *ngFor="let item of basketItems">
       <div class="row g-3 align-items-center">
-        <!-- Product Image -->
         <div class="col-md-2 text-center">
           <img [src]="item.imageBase64" class="img-thumbnail basket-img" alt="{{ item.name }}">
         </div>
 
-        <!-- Product Info -->
         <div class="col-md-6">
-          <h5 class="mb-1 text-dark fw-semibold">{{ item.name }}</h5>
-          <p class="mb-1 text-muted"><strong>Price:</strong> ${{ item.unitPrice }}</p>
-
-          <!-- Quantity Control -->
+          <h5 class="mb-1 text-dark fw-semibold">
+            {{ item.name }}
+            <span class="badge bg-info text-dark ms-2">x{{ item.quantity }}</span>
+          </h5>
+          
+          <p class="mb-1 text-muted">
+            <strong>Price:</strong>
+            <span class="text-primary"> {{ item.unitPrice }}$</span>
+          </p>
+          
           <div class="d-flex align-items-center mt-2">
             <span class="me-2 fw-medium">Quantity:</span>
-            <button class="btn btn-sm btn-outline-secondary me-2" (click)="updateQuantity('decrease')">-</button>
+            <button class="btn btn-sm btn-outline-secondary me-2" (click)="updateQuantity(item, 'decrease')">-</button>
             <span class="mx-1 fs-6">{{ item.quantity }}</span>
-            <button class="btn btn-sm btn-outline-secondary ms-2" (click)="updateQuantity('increase')">+</button>
+            <button class="btn btn-sm btn-outline-secondary ms-2" (click)="updateQuantity(item, 'increase')">+</button>
           </div>
         </div>
 
-        <!-- Action & Total -->
         <div class="col-md-4 text-md-end text-start mt-3 mt-md-0">
           <p class="fw-bold text-success mb-2">Total: ${{ item.unitPrice * item.quantity }}</p>
           <button class="btn btn-sm btn-outline-danger" (click)="removeFromBasket(item)">
@@ -33,5 +37,17 @@
       </div>
     </div>
 
+    <!-- Basket Summary -->
+    <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+      <h5 class="mb-0">Total Amount:</h5>
+      <h4 class="text-success mb-0">${{ getTotalAmount() }}</h4>
+    </div>
+
+    <!-- Checkout Button -->
+    <div class="text-end mt-3">
+      <button class="btn btn-lg btn-primary px-4" (click)="proceedToCheckout()">
+        <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
+      </button>
+    </div>
   </div>
 </div>

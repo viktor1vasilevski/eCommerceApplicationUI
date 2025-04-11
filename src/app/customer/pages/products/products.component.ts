@@ -93,22 +93,26 @@ export class ProductsComponent implements OnInit, OnDestroy  {
   }
 
   AddToBasket(item: any) {
-
+    debugger
     if(this._authManagerService.isLoggedIn()) {
       let userId = this._authManagerService.getUserId();
-      this._basketService.addToBasket(userId, item.id).subscribe({
+
+
+      const request = { items: [{ productId: item.id, quantity: 1 }] }
+      this._basketService.updateBasketForUser(userId, request).subscribe({
         next: (response: any) => {
           if(response && response.success && response.data) {
-            this._basketService.updateBasketA(response.data)
+            this._basketService.updateBasketA(response.data);
             this._notificationService.success(response.message);
           } else {
             this._notificationService.error(response.message);
           }
+          
         },
         error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
       })
     } else {
-      this._basketService.addItem(item.id, item.unitPrice, item.imageBase64);
+      this._basketService.addItem(item.id, item.name, item.unitPrice, item.imageBase64);
       this._notificationService.success('Item added to your basket!');
     }
 

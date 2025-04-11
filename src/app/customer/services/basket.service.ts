@@ -5,6 +5,7 @@ import { environment } from '../../../enviroments/enviroment.dev';
 
 interface BasketItem {
   productId: number;
+  name: string;
   quantity: number;
   unitPrice: number;
   imageBase64: string;
@@ -29,8 +30,8 @@ export class BasketService {
     return this._dataApiService.getById<any>(url);
   }
 
-  mergeBasketItemsForUserId(userId: string | null, request: any): Observable<any> {
-    const url = `${this.baseUrl}/userBasket/mergeBasketItemsForUserId/${userId}`
+  updateBasketForUser(userId: string | null, request: any): Observable<any> {
+    const url = `${this.baseUrl}/userBasket/updateBasketForUser/${userId}`
     return this._dataApiService.create<any, any>(url, request);
   }
 
@@ -48,14 +49,15 @@ export class BasketService {
     localStorage.setItem(this.basketKey, JSON.stringify(basket));
   }
 
-  addItem(productId: number, unitPrice: number, imageBase64: string, quantity: number = 1): void {
+  addItem(productId: number, name: string, unitPrice: number, imageBase64: string, quantity: number = 1): void {
     const currentBasket = this.basketSubject.value;
+    debugger
     const existingItem = currentBasket.find(item => item.productId === productId);
 
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
-      currentBasket.push({ productId, unitPrice, imageBase64, quantity });
+      currentBasket.push({ productId, unitPrice, imageBase64, quantity, name });
     }
 
     this.updateBasket(currentBasket);
@@ -86,10 +88,5 @@ export class BasketService {
   public updateBasketA(items: any): void {
     this.basketSubject.next(items);
     this.saveBasketToStorage(items);
-  }
-
-  public addToBasket(userId: string | null, itemId: string) {
-    const url = `${this.baseUrl}/userBasket/addToBasket/${userId}/${itemId}`
-    return this._dataApiService.create<any, any>(url, null);
   }
 }

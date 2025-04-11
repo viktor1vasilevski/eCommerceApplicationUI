@@ -34,7 +34,7 @@ export class ProductDetailsComponent {
       let userId = this._authManagerService.getUserId();
       const request = { items: [{ productId: product.id, quantity: this.selectedQuantity }] };
 
-      this._basketService.mergeBasketItemsForUserId(userId, request).subscribe({
+      this._basketService.updateBasketForUser(userId, request).subscribe({
         next: (response: any) => {
           if(response && response.success && response.data) {
             this._basketService.updateBasketA(response.data);
@@ -46,7 +46,7 @@ export class ProductDetailsComponent {
         error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
       })      
     } else {
-      this._basketService.addItem(product.id, product.unitPrice, product.imageBase64, this.selectedQuantity);
+      this._basketService.addItem(product.id, product.name, product.unitPrice, product.imageBase64, this.selectedQuantity);
       this._notificationService.success('Item added to your basket!');
     }
   }

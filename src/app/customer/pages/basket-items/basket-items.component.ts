@@ -29,6 +29,8 @@ export class BasketItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.basketItems = this._basketService.loadBasketFromStorage();
+    console.log(this.basketItems);
+    
   }
 
   removeFromBasket(item: any) {
@@ -55,16 +57,46 @@ export class BasketItemsComponent implements OnInit {
    
   }
 
-  updateQuantity(action: string) {
-    if (action === 'increase') {
-      if (this.selectedQuantity < this.product.quantity) {
-        this.selectedQuantity++;
-      }
-    } else if (action === 'decrease') {
-      if (this.selectedQuantity > 1) {
-        this.selectedQuantity--;
-      }
+  getTotalAmount(): number {
+    return this.basketItems.reduce((sum: number, item: any) => {
+      return sum + (item.unitPrice * item.quantity);
+    }, 0);
+  }
+  
+
+  proceedToCheckout() {
+    // Navigate or open checkout page/modal
+    console.log("Proceeding to checkout...");
+  }
+  
+  
+
+  updateQuantity(item: any, action: string) {
+    let quantityChange = action === 'increase' ? 1 : -1;
+    if(this._authManagerService.isLoggedIn()) {
+      let userId = this._authManagerService.getUserId();
+
+      
+  
+      const request = {items: [{ productId: item.id, quantity: quantityChange }]};
+  
+      this._basketService.updateBasketForUser(userId, request).subscribe({
+        next: (response: any) => {
+          if(response && response.success && response.data) {
+            this._basketService.updateBasketA(response.data);
+            this._notificationService.success(response.message);
+          } else {
+            this._notificationService.error(response.message);
+          }
+        },
+        error: (errorResponse: any) => this._errorHandlerService.handleErrors(errorResponse)
+      })
+    } else {
+      debugger
+      this._basketService.addItem(item.productId, item.name, item.unitPrice, item.imageBase64, quantityChange);
+      this._notificationService.success('Your basket has been updated.');
     }
+    
   }
 
 }

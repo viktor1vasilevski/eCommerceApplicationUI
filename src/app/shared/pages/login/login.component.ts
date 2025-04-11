@@ -73,7 +73,7 @@ export class LoginComponent {
         let localStorageItems = this._basketService.loadBasketFromStorage();
         const request = { items: localStorageItems };
         if(role == 'Customer' && localStorageItems.length > 0) {
-          this._basketService.mergeBasketItemsForUserId(id, request).subscribe({
+          this._basketService.updateBasketForUser(id, request).subscribe({
             next: (response: any) => {
               this._basketService.updateBasketA(response.data);      
             },
