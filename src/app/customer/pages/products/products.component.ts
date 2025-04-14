@@ -115,7 +115,5 @@ export class ProductsComponent implements OnInit, OnDestroy  {
       this._basketService.addItem(item.id, item.name, item.unitPrice, item.imageBase64);
       this._notificationService.success('Item added to your basket!');
     }
-
-
   }
 }

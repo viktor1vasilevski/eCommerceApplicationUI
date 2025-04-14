@@ -101,13 +101,16 @@
                             </li>
 
                             <!-- View Cart & Checkout -->
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-center cart-view-btn" routerLink="/customer/basket-items">View
-                                    Basket</a>
-                            </li>
+                            <div *ngIf="basketItems.length > 0">
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li >
+                                    <a class="dropdown-item text-center cart-view-btn" routerLink="/customer/basket-items">View
+                                        Basket</a>
+                                </li>
+                            </div>
+
                         </ul>
 
                     </div>
