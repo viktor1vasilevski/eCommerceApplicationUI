@@ -47,7 +47,7 @@
 
       <!-- Checkout Button -->
       <div class="text-end mt-3">
-        <button class="btn btn-lg btn-primary px-4" (click)="proceedToCheckout()">
+        <button class="btn btn-lg btn-primary px-4" routerLink="/customer/checkout">
           <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
         </button>
       </div>
@@ -59,6 +59,9 @@
         <i class="bi bi-cart-x display-4 mb-3"></i>
         <h5>Your basket is currently empty.</h5>
         <p>Add some items to get started!</p>
+        <!-- <a routerLink="/shop" class="btn btn-outline-primary mt-3">
+          <i class="bi bi-arrow-left me-2"></i> Continue Shopping
+        </a> -->
       </div>
     </ng-template>
   </div>

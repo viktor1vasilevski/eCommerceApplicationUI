@@ -22,4 +22,9 @@ export const customerRoutes: Routes = [
     loadComponent: () =>
       import('./pages/basket-items/basket-items.component').then((m) => m.BasketItemsComponent),
   },
+  {
+    path: 'checkout',
+    loadComponent: () =>
+      import('./pages/checkout/checkout.component').then((m) => m.CheckoutComponent),
+  },
 ];

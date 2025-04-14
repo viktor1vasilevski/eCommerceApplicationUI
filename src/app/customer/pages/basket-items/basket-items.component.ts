@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { AuthManagerService } from '../../../shared/services/auth-manager.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-basket-items',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './basket-items.component.html',
   styleUrl: './basket-items.component.css'
 })
@@ -62,14 +63,7 @@ export class BasketItemsComponent implements OnInit {
       return sum + (item.unitPrice * item.quantity);
     }, 0);
   }
-  
 
-  proceedToCheckout() {
-    // Navigate or open checkout page/modal
-    console.log("Proceeding to checkout...");
-  }
-  
-  
 
   updateQuantity(item: any, action: string) {
     let quantityChange = action === 'increase' ? 1 : -1;

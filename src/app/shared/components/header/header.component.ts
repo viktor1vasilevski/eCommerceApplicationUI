@@ -98,6 +98,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() : void {
     this._authManagerService.logout();
+    this._basketService.clearBasket();
     this.router.navigate(['/home']);
   }
 
